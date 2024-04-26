@@ -36,10 +36,10 @@ public class OrderService implements IOrderService {
 
     @Override
     public OrderDto createOrder(UserDto userDto, AddressDto shippingAddress) {
-        shippingAddress.setUser(userDto);
+//        shippingAddress.setUser(userDto);
         Address address = AddressMapper.MAPPER.mapToAddress(shippingAddress);
         addressRepository.save(address);
-        userDto.getAddress().add(AddressMapper.MAPPER.mapToAddressDto(address));
+        userDto.getAddress().add(address);
         User user = UserMapper.MAPPER.mapToUser(userDto);
         userRepository.save(user);
 

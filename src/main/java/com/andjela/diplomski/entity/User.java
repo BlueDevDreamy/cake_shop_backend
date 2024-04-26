@@ -44,7 +44,7 @@ public class User extends BaseEntity {
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany
     private List<Address> addresses;
 
     @Embedded

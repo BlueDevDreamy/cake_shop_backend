@@ -18,7 +18,7 @@ public class AuthHelper {
     public static boolean currentUserHasAuthority(AuthorityPermissionEnum authority) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        if(CollectionUtils.isEmpty(authorities)) {
+        if (CollectionUtils.isEmpty(authorities)) {
             return false;
         }
         return authorities.stream().map(a -> a.getAuthority()).filter(a -> a.equalsIgnoreCase(authority.name())).findAny().isPresent();

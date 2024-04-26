@@ -33,9 +33,9 @@ public class Address extends BaseEntity {
     @Column(name = "zip_code", nullable = false)
     private String zipCode;
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+//    @JsonIgnore
+//    @ManyToOne
+//    @JoinColumn(name = "user_id")
+//    private User user;
 
 }

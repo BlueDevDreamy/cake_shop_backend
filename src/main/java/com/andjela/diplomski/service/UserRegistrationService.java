@@ -135,14 +135,15 @@ public class UserRegistrationService {
 
     @Transactional
     public UserDto registerAdmin(RegisterAdminDto request) {
-        if(!AuthHelper.currentUserIsSuperAdmin()) {
-            throw new ApiValidationException("Not enough privilegies to create admin.");
-        }
+//        if(!AuthHelper.currentUserIsSuperAdmin()) {
+//            throw new ApiValidationException("Not enough privilegies to create admin.");
+//        }
         return registerUser(request);
     }
+
     @Transactional
     public UserDto registerEmployee(RegisterEmployeeDto request) {
-        if(!AuthHelper.currentUserIsSuperAdmin()) {
+        if (!AuthHelper.currentUserIsSuperAdmin()) {
             throw new ApiValidationException("Not enough privilegies to create employee.");
         }
         return registerUser(request);
@@ -155,7 +156,7 @@ public class UserRegistrationService {
     }
 
     private UserDto registerUser(UserData request) {
-        if(userRepository.findByEmail(request.getEmail()).isPresent()){
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new EntityAlreadyExistsException("Email already exists!.");
         }
 
@@ -166,7 +167,7 @@ public class UserRegistrationService {
                         .filter(ra -> ra.equalsIgnoreCase(a.getName())).findAny().isPresent()
                 )
                 .collect(Collectors.toSet());
-
+        System.out.println(authorities);
         UserType userType = UserType.valueOf(request.getUserType());
 
         String passwordEncoded = request.getPassword() != null ? passwordEncoder.encode(request.getPassword()) : null;
@@ -183,7 +184,7 @@ public class UserRegistrationService {
         if (request.getLastName() == null || request.getLastName().trim().isEmpty() || !request.getLastName().matches("^[A-Z][a-z ]*$")) {
             throw new DataNotValidException("Last name is not in a valid format");
         }
-        if (request.getPhoneNumber() == null || request.getPhoneNumber().trim().isEmpty() || !request.getPhoneNumber().matches("^[0-9 ]+$")) {
+        if (request.getPhoneNumber() == null || request.getPhoneNumber().trim().isEmpty() || !request.getPhoneNumber().matches("^(\\+)(3816)([0-9]){6,9}$")) {
             throw new DataNotValidException("Phone number is not in a valid format");
         }
         User user = User.builder()
@@ -197,7 +198,7 @@ public class UserRegistrationService {
                 .userType(userType)
                 .build();
 
-        try{
+        try {
             User registeredUser = userRepository.save(user);
             //ToDo send email when successfully registered
 //            SendEmailRequestDto sendEmailRequestDto = SendEmailRequestDto.builder()
@@ -268,14 +269,13 @@ public class UserRegistrationService {
     public void saveRegistrationPassword(RegistrationPasswordDto registrationPasswordDto) {
         final TokenStatus resetTokenStatus = validatePasswordResetToken(registrationPasswordDto.getToken());
 
-        if(resetTokenStatus == TokenStatus.INVALID) {
+        if (resetTokenStatus == TokenStatus.INVALID) {
             throw new AppException("Token nije validan.");
-        }
-        else if(resetTokenStatus == TokenStatus.EXPIRED) {
+        } else if (resetTokenStatus == TokenStatus.EXPIRED) {
             throw new AppException("Token je istekao.");
         }
         Optional<User> userFound = getUserByPasswordResetToken(registrationPasswordDto.getToken());
-        if(userFound.isPresent()) {
+        if (userFound.isPresent()) {
             User user = userFound.get();
             user.setPassword(passwordEncoder.encode(registrationPasswordDto.getNewPassword()));
             user.setUpdatedAt(LocalDateTime.now());
@@ -293,9 +293,9 @@ public class UserRegistrationService {
         User user = registrationToken.getUser();
 
         TokenStatus tokenStatus = validateRegistrationToken(registrationToken);
-        if(tokenStatus == TokenStatus.EXPIRED) {
+        if (tokenStatus == TokenStatus.EXPIRED) {
             return tokenStatus;
-        } else if(tokenStatus == TokenStatus.INVALID) {
+        } else if (tokenStatus == TokenStatus.INVALID) {
             // TODO email resend token link
             return tokenStatus;
         }
