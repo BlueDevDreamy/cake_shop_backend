@@ -35,7 +35,7 @@ public class CakeService implements ICakeService {
         if (cakeDto.getMinTier() < 1) {
             throw new DataNotValidException("Min tier must be greater than 1");
         }
-        if (cakeDto.getMaxTier() < 6) {
+        if (cakeDto.getMaxTier() > 6) {
             throw new DataNotValidException("Max tier must be less than 6");
         }
         if (cakeDto.getImageUrl().isEmpty()) {
@@ -94,6 +94,12 @@ public class CakeService implements ICakeService {
             isChanged = true;
             foundCake.setPricePerKilo(cakeDto.getPricePerKilo());
         }
+        if (cakeDto.getDecorationPrice() < 0) {
+            throw new DataNotValidException("Decoration price must be positive number");
+        } else {
+            isChanged = true;
+            foundCake.setDecorationPrice(cakeDto.getDecorationPrice());
+        }
         if (cakeDto.getMinWeight() < 2) {
             throw new DataNotValidException("Min weight must be greater than 2");
         } else {
@@ -112,7 +118,7 @@ public class CakeService implements ICakeService {
             isChanged = true;
             foundCake.setMinTier(cakeDto.getMinTier());
         }
-        if (cakeDto.getMaxTier() < 6) {
+        if (cakeDto.getMaxTier() > 6) {
             throw new DataNotValidException("Max tier must be less than 6");
         } else {
             isChanged = true;

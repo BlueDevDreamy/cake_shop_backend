@@ -7,15 +7,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.util.Set;
-import java.util.UUID;
 
 @SuperBuilder(toBuilder = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "cart")
+@Table(name = "cake")
 public class Cake extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,9 +43,4 @@ public class Cake extends BaseEntity {
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
-//    @GeneratedValue(strategy = GenerationType.UUID)
-//    @UuidGenerator
-//    @JdbcTypeCode(SqlTypes.CHAR)
-//    @Column(columnDefinition = "char(36)", nullable = false)
-//    private UUID uuid;
 }

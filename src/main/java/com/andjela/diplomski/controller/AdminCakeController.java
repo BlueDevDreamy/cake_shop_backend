@@ -25,7 +25,7 @@ public class AdminCakeController {
         return new ResponseEntity<>(cakeDto, HttpStatus.CREATED);
     }
 
-    @PutMapping("create-multiple")
+    @PostMapping("create-multiple")
     public ResponseEntity<List<CakeDto>> createMultipleCakes(@RequestBody CakeDto[] req) {
         List<CakeDto> cakeDtoList = new ArrayList<>();
         for (CakeDto cakeDto : req) {

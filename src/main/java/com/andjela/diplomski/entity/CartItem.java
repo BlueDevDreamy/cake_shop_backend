@@ -37,7 +37,7 @@ public class CartItem extends BaseEntity {
     @Column(name = "total_price", nullable = false)
     private int totalPrice;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     private Cake cake;
 
     @OneToMany

@@ -32,7 +32,7 @@ public class BaseEntity implements Serializable {
     @ToString.Exclude
     @CreatedDate
     //   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @Column(name = "created_at", updatable = false, nullable = false)
+    @Column(name = "created_at", updatable = false)
     protected LocalDateTime createdAt;
 
     @ToString.Exclude
