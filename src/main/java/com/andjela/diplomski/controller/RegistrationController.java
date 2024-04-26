@@ -68,11 +68,11 @@ public class RegistrationController {
         }
     }
     // User activation - verification
-    @GetMapping("resend-token/{email}")
-    public ResponseEntity<String> resendRegistrationToken(@PathVariable("email") final String email) {
-        String response = userRegistrationService.resendRegistrationTokenForEmail(email);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+//    @GetMapping("resend-token/{email}")
+//    public ResponseEntity<String> resendRegistrationToken(@PathVariable("email") final String email) {
+//        String response = userRegistrationService.resendRegistrationTokenForEmail(email);
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
 
     // Save password
     @PostMapping("save-password")

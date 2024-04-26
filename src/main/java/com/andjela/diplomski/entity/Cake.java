@@ -1,17 +1,11 @@
 package com.andjela.diplomski.entity;
 
 import com.andjela.diplomski.common.BaseEntity;
-import com.andjela.diplomski.entity.codebook.Category;
-import com.andjela.diplomski.entity.codebook.Flavor;
-import com.andjela.diplomski.entity.codebook.Type;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.UuidGenerator;
-import org.hibernate.type.SqlTypes;
 
 import java.util.Set;
 import java.util.UUID;
@@ -27,45 +21,33 @@ public class Cake extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "price_per_kilo")
-    private Integer pricePerKilo;
+    @Column(name = "price_per_kilo", nullable = false)
+    private int pricePerKilo;
 
     @Column(name = "decoration_price")
-    private Integer decorationPrice;
-
-//    @Column(name = "layer")
-//    private Integer layer;
-//
-//    private Flavor flavor;
-//
-    @ManyToOne
-    @JoinColumn(name = "type_id")
-    private Type type;
+    private int decorationPrice;
 
     @Column(name = "min_weight")
-    private Double minWeight;
+    private double minWeight;
 
     @Column(name = "max_weight")
-    private Double maxWeight;
+    private double maxWeight;
 
-    @Column(name = "selected_weight")
-    private Double selectedWeight;
+    @Column(name = "min_tier")
+    private int minTier;
 
-    @Column(name = "piece_number")
-    private Integer pieceNumber;
+    @Column(name = "max_tier")
+    private int maxTier;
 
-    @Column(name = "total_price")
-    private Integer totalPrice;
-
-    @Column(name = "image_url")
+    @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @UuidGenerator
-    @JdbcTypeCode(SqlTypes.CHAR)
-    @Column(columnDefinition = "char(36)", nullable = false)
-    private UUID uuid;
+//    @GeneratedValue(strategy = GenerationType.UUID)
+//    @UuidGenerator
+//    @JdbcTypeCode(SqlTypes.CHAR)
+//    @Column(columnDefinition = "char(36)", nullable = false)
+//    private UUID uuid;
 }

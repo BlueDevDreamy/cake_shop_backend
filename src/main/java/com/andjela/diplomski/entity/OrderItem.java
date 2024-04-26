@@ -1,6 +1,7 @@
 package com.andjela.diplomski.entity;
 
 import com.andjela.diplomski.common.BaseEntity;
+import com.andjela.diplomski.entity.codebook.Flavor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @SuperBuilder(toBuilder = true)
@@ -29,30 +31,38 @@ public class OrderItem extends BaseEntity {
     @ManyToOne
     private Order order;
 
+    @Column(nullable = false, name = "selected_weight")
+    private double selectedWeight;
+
+    @Column(nullable = false, name = "selected_layers")
+    private double selectedLayers;
+
+    @Column(name = "pieces_number")
+    private int piecesNumber;
+
+    @Column(name = "total_price", nullable = false)
+    private int totalPrice;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Cake cake;
+
+    @OneToMany
+    private List<Flavor> flavors;
+
+    @Column(name = "name")
+    private String note;
+
+    @Column(name = "fake_layer")
+    private int fakeLayer;
+
+    @JsonIgnore
     @ManyToOne
-    private Product product;
-
-    @Column(name = "price")
-    private Integer price;
-
-    @Column(name = "discounted_price")
-    private Integer discountedPrice;
-
-    @Column(name = "delivery_date")
-    private LocalDateTime deliveryDate;
-
-    @Column(name = "quantity")
-    private int quantity;
+    private Cart cart;
 
     @Column(name = "user_id")
     private Long userId;
 
-    @Column(name = "weight")
-    private Double weight;
+//    @Column(name = "discounted_price")
+//    private int discountedPrice;
 
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @UuidGenerator
-    @JdbcTypeCode(SqlTypes.CHAR)
-    @Column(columnDefinition = "char(36)", nullable = false)
-    private UUID uuid;
 }

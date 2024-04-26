@@ -33,20 +33,15 @@ public class Cart extends BaseEntity {
     private Set<CartItem> cartItems;
 
     @Column(name = "total_price")
-    private Integer totalPrice;
+    private int totalPrice;
 
     @Column(name = "total_item")
     private int totalItem;
 
     @Column(name = "total_discounted_price")
-    private Integer totalDiscountedPrice;
+    private int totalDiscountedPrice;
 
     @Column(name = "discount")
-    private Integer discount;
+    private int discount;
 
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @UuidGenerator
-    @JdbcTypeCode(SqlTypes.CHAR)
-    @Column(columnDefinition = "char(36)", nullable = false)
-    private UUID uuid;
 }

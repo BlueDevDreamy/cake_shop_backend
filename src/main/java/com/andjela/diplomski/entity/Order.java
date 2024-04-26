@@ -19,14 +19,14 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "oorder")
+@Table(name = "orders")
 public class Order extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @Column(name = "order_id")
-//    private String orderId;
+    @Column(name = "order_number")
+    private String orderNumber;
 
     @ManyToOne
     private User user;
@@ -36,6 +36,9 @@ public class Order extends BaseEntity {
 
     @Column(name = "order_date")
     private LocalDateTime orderDate;
+
+    @Column(name = "order_status")
+    private String orderStatus;
 
     @Column(name = "delivery_date")
     private LocalDateTime deliveryDate;
@@ -48,23 +51,9 @@ public class Order extends BaseEntity {
     private PaymentDetails paymentDetails;
 
     @Column(name = "total_price")
-    private Integer totalPrice;
-
-    @Column(name = "total_discounted_price")
-    private Integer totalDiscountedPrice;
-
-    @Column(name = "discount")
-    private Integer discount;
-
-    @Column(name = "order_status")
-    private String orderStatus;
+    private int totalPrice;
 
     @Column(name = "total_item")
     private int totalItem;
 
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @UuidGenerator
-    @JdbcTypeCode(SqlTypes.CHAR)
-    @Column(columnDefinition = "char(36)", nullable = false)
-    private UUID uuid;
 }

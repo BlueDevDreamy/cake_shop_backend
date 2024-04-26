@@ -1,8 +1,6 @@
 package com.andjela.diplomski.dto.order;
 
-import com.andjela.diplomski.dto.product.ProductDto;
 import com.andjela.diplomski.entity.Order;
-import com.andjela.diplomski.entity.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

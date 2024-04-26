@@ -1,13 +1,15 @@
 package com.andjela.diplomski.service;
 
 import com.andjela.diplomski.dto.address.AddressDto;
+
 import com.andjela.diplomski.dto.address.AddressMapper;
+import com.andjela.diplomski.dto.cake.CakeMapper;
 import com.andjela.diplomski.dto.cart.CartDto;
 import com.andjela.diplomski.dto.cart.CartMapper;
 import com.andjela.diplomski.dto.cartItem.CartItemDto;
 import com.andjela.diplomski.dto.order.OrderDto;
+
 import com.andjela.diplomski.dto.order.OrderMapper;
-import com.andjela.diplomski.dto.product.ProductMapper;
 import com.andjela.diplomski.dto.user.UserDto;
 import com.andjela.diplomski.dto.user.UserMapper;
 import com.andjela.diplomski.entity.*;
@@ -47,12 +49,8 @@ public class OrderService implements IOrderService {
 
         for (CartItemDto item : cartDto.getCartItems()) {
             OrderItem orderItem = OrderItem.builder()
-                    .price(item.getPrice())
-                    .product(ProductMapper.MAPPER.mapToProduct(item.getProduct()))
-                    .quantity(item.getQuantity())
-                    .weight(item.getWeight())
+                    .cake(item.getCake())
                     .userId(item.getUserId())
-                    .discountedPrice(item.getDiscountedPrice())
                     .createdAt(LocalDateTime.now())
                     .build();
             OrderItem createdOrderItem = orderItemRepository.save(orderItem);
@@ -62,8 +60,6 @@ public class OrderService implements IOrderService {
                 .user(user)
                 .orderItems(orderItems)
                 .totalPrice(cart.getTotalPrice())
-                .totalDiscountedPrice(cart.getTotalDiscountedPrice())
-                .discount(cart.getDiscount())
                 .totalItem(cart.getTotalItem())
                 .shippingAddress(address)
                 .orderDate(LocalDateTime.now())
@@ -136,10 +132,10 @@ public class OrderService implements IOrderService {
     public List<OrderDto> getAllOrders() {
         List<OrderDto> foundOrders = new ArrayList<>();
         List<Order> orders = orderRepository.findAll();
-        if (orders.isEmpty()){
+        if (orders.isEmpty()) {
             throw new ResourceNotFoundException("List of orders is empty");
         }
-        for (Order o : orders){
+        for (Order o : orders) {
             OrderDto orderDto = OrderMapper.MAPPER.mapToOrderDto(o);
             foundOrders.add(orderDto);
         }

@@ -52,13 +52,6 @@ public class User extends BaseEntity {
     @CollectionTable(name = "payment_information", joinColumns = @JoinColumn(name = "user_id"))
     private List<PaymentInformation> paymentInformation;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Rating> ratings;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Review> reviews;
 
     @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.EAGER)

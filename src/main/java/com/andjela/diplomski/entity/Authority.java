@@ -35,8 +35,9 @@ public class Authority extends BaseEntity {
     @ManyToMany(mappedBy = "authorities")
     private Set<User> users;
 
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @UuidGenerator
-    @JdbcTypeCode(SqlTypes.CHAR)
-    @Column(columnDefinition = "char(36)", nullable = false)
-    private UUID uuid;}
+//    @GeneratedValue(strategy = GenerationType.UUID)
+//    @UuidGenerator
+//    @JdbcTypeCode(SqlTypes.CHAR)
+//    @Column(columnDefinition = "char(36)", nullable = false)
+//    private UUID uuid;
+}

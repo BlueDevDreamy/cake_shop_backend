@@ -3,8 +3,6 @@ package com.andjela.diplomski.service;
 import com.andjela.diplomski.common.TokenStatus;
 import com.andjela.diplomski.common.UserType;
 import com.andjela.diplomski.dto.auth.*;
-import com.andjela.diplomski.dto.email.EmailSendResponseDto;
-import com.andjela.diplomski.dto.email.SendEmailRequestDto;
 import com.andjela.diplomski.dto.user.UserDto;
 import com.andjela.diplomski.dto.user.UserData;
 import com.andjela.diplomski.dto.user.UserMapper;
@@ -19,7 +17,6 @@ import com.andjela.diplomski.repository.auth.AuthorityRepository;
 import com.andjela.diplomski.repository.auth.PasswordResetTokenRepository;
 import com.andjela.diplomski.repository.auth.RegistrationTokenRepository;
 import com.andjela.diplomski.service.auth.RegistrationTokenService;
-import com.andjela.diplomski.service.email.MailerService;
 import com.andjela.diplomski.utils.AuthHelper;
 import com.andjela.diplomski.utils.RequestHelper;
 import jakarta.transaction.Transactional;
@@ -44,7 +41,6 @@ public class UserService implements IUserService {
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final RegistrationTokenRepository registrationTokenRepository;
     private final AuthorityRepository authorityRepository;
-    private final MailerService mailerService;
     private final PasswordEncoder passwordEncoder;
 
     private final RegistrationTokenService registrationTokenService;
@@ -55,9 +51,6 @@ public class UserService implements IUserService {
 
     @Value("${frontend.registrationConfirmTokenUrl}")
     private String confirmTokenUiPageUrl;
-
-    @Value("${support.email}")
-    private String supportEmail;
 
     @Value("${app.jwt.secret}")
     private String jwtSecret;

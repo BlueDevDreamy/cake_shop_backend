@@ -3,9 +3,6 @@ package com.andjela.diplomski.service;
 import com.andjela.diplomski.common.TokenStatus;
 import com.andjela.diplomski.common.UserType;
 import com.andjela.diplomski.dto.auth.*;
-import com.andjela.diplomski.dto.cart.CartDto;
-import com.andjela.diplomski.dto.email.EmailSendResponseDto;
-import com.andjela.diplomski.dto.email.SendEmailRequestDto;
 import com.andjela.diplomski.dto.user.UserData;
 import com.andjela.diplomski.dto.user.UserDto;
 import com.andjela.diplomski.dto.user.UserMapper;
@@ -20,7 +17,6 @@ import com.andjela.diplomski.repository.auth.AuthorityRepository;
 import com.andjela.diplomski.repository.auth.PasswordResetTokenRepository;
 import com.andjela.diplomski.repository.auth.RegistrationTokenRepository;
 import com.andjela.diplomski.service.auth.RegistrationTokenService;
-import com.andjela.diplomski.service.email.MailerService;
 import com.andjela.diplomski.utils.AuthHelper;
 import com.andjela.diplomski.utils.RequestHelper;
 import jakarta.transaction.Transactional;
@@ -47,7 +43,6 @@ public class UserRegistrationService {
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final RegistrationTokenRepository registrationTokenRepository;
     private final AuthorityRepository authorityRepository;
-    private final MailerService mailerService;
     private final PasswordEncoder passwordEncoder;
     private final CartService cartService;
     private final RegistrationTokenService registrationTokenService;
@@ -58,9 +53,6 @@ public class UserRegistrationService {
 
     @Value("${frontend.registrationConfirmTokenUrl}")
     private String confirmTokenUiPageUrl;
-
-    @Value("${support.email}")
-    private String supportEmail;
 
     @Value("${app.jwt.secret}")
     private String jwtSecret;
@@ -98,48 +90,56 @@ public class UserRegistrationService {
                 .passwordChanged(true)
                 .build();
     }
+//ToDo requestResetUserPassword
 
-    public EmailSendResponseDto requestResetUserPassword(Long userId) {
-        log.info("Reseting password for user with is " + userId);
-        UserDto userDto = userService.getUserById(userId);
-        User user = UserMapper.MAPPER.mapToUser(userDto);
+//    public EmailSendResponseDto requestResetUserPassword(Long userId) {
+//        log.info("Reseting password for user with is " + userId);
+//        UserDto userDto = userService.getUserById(userId);
+//        User user = UserMapper.MAPPER.mapToUser(userDto);
+//
+//        Optional<PasswordResetToken> passwordResetTokenOpt = passwordResetTokenRepository.findByUser(user);
+//
+//
+//        PasswordResetToken passwordResetToken = passwordResetTokenOpt.isEmpty() ?
+//                PasswordResetToken.builder().user(user).createdAt(LocalDateTime.now()).build()
+//                : passwordResetTokenOpt.get();
+//
+//        passwordResetToken.setToken(UUID.randomUUID().toString());
+//        passwordResetToken.setExpiryDate(ZonedDateTime.now().plusMinutes(PasswordResetToken.EXPIRATION_MINUTES));
+//
+//        passwordResetTokenRepository.save(passwordResetToken);
+//
+//        final String subject = "Reset lozinke";
+//        final String resetPasswordUrl = frontendResetPasswordUrl + "?token=" + passwordResetToken.getToken();
+//        final String message = "Kliknite na link da resetujete lozinku: ";
+//        final String messageBody = message + " \r\n" + resetPasswordUrl;
+//        SendEmailRequestDto emailRequest = SendEmailRequestDto.builder()
+//                .subject(subject)
+//                .body(messageBody)
+//                .to(user.getEmail())
+//                .from(supportEmail)
+//                .build();
+//
+//        EmailSendResponseDto response = mailerService.sendTextEmail(emailRequest);
+//
+//        return response;
+//    }
+//
+//        @Transactional
+//    public UserDto registerAdmin(RegisterAdminDto request) {
+//        if(!AuthHelper.currentUserIsSuperAdmin()) {
+//            throw new ApiValidationException("Not enough privilegies to create admin.");
+//        }
+//        return registerUser(request);
+//    }
 
-        Optional<PasswordResetToken> passwordResetTokenOpt = passwordResetTokenRepository.findByUser(user);
-
-
-        PasswordResetToken passwordResetToken = passwordResetTokenOpt.isEmpty() ?
-                PasswordResetToken.builder().user(user).createdAt(LocalDateTime.now()).build()
-                : passwordResetTokenOpt.get();
-
-        passwordResetToken.setToken(UUID.randomUUID().toString());
-        passwordResetToken.setExpiryDate(ZonedDateTime.now().plusMinutes(PasswordResetToken.EXPIRATION_MINUTES));
-
-        passwordResetTokenRepository.save(passwordResetToken);
-
-        final String subject = "Reset lozinke";
-        final String resetPasswordUrl = frontendResetPasswordUrl + "?token=" + passwordResetToken.getToken();
-        final String message = "Kliknite na link da resetujete lozinku: ";
-        final String messageBody = message + " \r\n" + resetPasswordUrl;
-        SendEmailRequestDto emailRequest = SendEmailRequestDto.builder()
-                .subject(subject)
-                .body(messageBody)
-                .to(user.getEmail())
-                .from(supportEmail)
-                .build();
-
-        EmailSendResponseDto response = mailerService.sendTextEmail(emailRequest);
-
-        return response;
-    }
-
-        @Transactional
+    @Transactional
     public UserDto registerAdmin(RegisterAdminDto request) {
         if(!AuthHelper.currentUserIsSuperAdmin()) {
             throw new ApiValidationException("Not enough privilegies to create admin.");
         }
         return registerUser(request);
     }
-
     @Transactional
     public UserDto registerEmployee(RegisterEmployeeDto request) {
         if(!AuthHelper.currentUserIsSuperAdmin()) {
@@ -199,14 +199,15 @@ public class UserRegistrationService {
 
         try{
             User registeredUser = userRepository.save(user);
-            SendEmailRequestDto sendEmailRequestDto = SendEmailRequestDto.builder()
-                    .subject("Registration email")
-                    .to(user.getEmail())
-                    .body("TODO....")
-                    .from("emailjstest327@gmail.com")
-                    .build();
-            EmailSendResponseDto emailSendResponseDto = mailerService.sendTextEmail(sendEmailRequestDto);
-            log.info("Email response: ", emailSendResponseDto);
+            //ToDo send email when successfully registered
+//            SendEmailRequestDto sendEmailRequestDto = SendEmailRequestDto.builder()
+//                    .subject("Registration email")
+//                    .to(user.getEmail())
+//                    .body("...")
+//                    .from("emailjstest327@gmail.com")
+//                    .build();
+//            EmailSendResponseDto emailSendResponseDto = mailerService.sendTextEmail(sendEmailRequestDto);
+//            log.info("Email response: ", emailSendResponseDto);
             return UserMapper.MAPPER.mapToUserDTO(registeredUser);
 
         } catch (RuntimeException e) {
@@ -215,53 +216,53 @@ public class UserRegistrationService {
         }
     }
 
-    @Transactional
-    public void confirmRegistration(final OnRegistrationCompleteEvent event) {
-        final User user = event.getUser();
-        RegistrationToken verificationRefreshToken = registrationTokenService.createRegistrationTokenForUser(user);
-        final SendEmailRequestDto emailRequest = constructEmailMessageRegToken(event, user, verificationRefreshToken.getToken());
-        EmailSendResponseDto response = mailerService.sendTextEmail(emailRequest);
-        log.info("Email sent, response: " + response);
-    }
+//    @Transactional
+//    public void confirmRegistration(final OnRegistrationCompleteEvent event) {
+//        final User user = event.getUser();
+//        RegistrationToken verificationRefreshToken = registrationTokenService.createRegistrationTokenForUser(user);
+//        final SendEmailRequestDto emailRequest = constructEmailMessageRegToken(event, user, verificationRefreshToken.getToken());
+//        EmailSendResponseDto response = mailerService.sendTextEmail(emailRequest);
+//        log.info("Email sent, response: " + response);
+//    }
 
-    @Transactional
-    public String resendRegistrationTokenForEmail(final String email) {
-        final User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
-        RegistrationToken registrationToken = registrationTokenRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException("RefreshToken", "user", email));
-        registrationToken.updateToken(UUID.randomUUID().toString());
-        registrationToken = registrationTokenRepository.save(registrationToken);
+//    @Transactional
+//    public String resendRegistrationTokenForEmail(final String email) {
+//        final User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
+//        RegistrationToken registrationToken = registrationTokenRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException("RefreshToken", "user", email));
+//        registrationToken.updateToken(UUID.randomUUID().toString());
+//        registrationToken = registrationTokenRepository.save(registrationToken);
+//
+//        final SendEmailRequestDto emailRequest = constructEmailMessageRegToken(RequestHelper.getBaseUrl(), user, registrationToken.getToken());
+//        EmailSendResponseDto response = mailerService.sendTextEmail(emailRequest);
+//        log.info("Resend tokem email sent", response);
+//        return "Registration token resend";
+//    }
 
-        final SendEmailRequestDto emailRequest = constructEmailMessageRegToken(RequestHelper.getBaseUrl(), user, registrationToken.getToken());
-        EmailSendResponseDto response = mailerService.sendTextEmail(emailRequest);
-        log.info("Resend tokem email sent", response);
-        return "Registration token resend";
-    }
+//    private SendEmailRequestDto constructEmailMessageRegToken(final OnRegistrationCompleteEvent event, final User user, final String token) {
+//        return constructEmailMessageRegToken(event.getAppUrl(), user, token);
+//    }
+//    private SendEmailRequestDto constructEmailMessageRegToken(final String baseUrl, final User user, final String token) {
+//        final String subject = "Registration Confirmation";
+//        final String confirmationUrl = confirmTokenUiPageUrl + "?token=" + token;
+//        String message = "Uspesno ste se registrovali. Za zavrsetak procea registracije kliknite na link: ";
+//        String messageBody = message + " \r\n" + confirmationUrl;
+//
+//        message += "\n\n U slucaju da imate problema sa gornjim linkom kliknite na: ";
+//        final String confirmationUrlBackup = baseUrl + "/api/registration/confirm-token?token=" + token;
+//        messageBody += message + " \r\n" + confirmationUrlBackup;
+//
+//        final SendEmailRequestDto emailRequest = constructEmail(subject, messageBody, user);
+//        return emailRequest;
+//    }
 
-    private SendEmailRequestDto constructEmailMessageRegToken(final OnRegistrationCompleteEvent event, final User user, final String token) {
-        return constructEmailMessageRegToken(event.getAppUrl(), user, token);
-    }
-    private SendEmailRequestDto constructEmailMessageRegToken(final String baseUrl, final User user, final String token) {
-        final String subject = "Registration Confirmation";
-        final String confirmationUrl = confirmTokenUiPageUrl + "?token=" + token;
-        String message = "Uspesno ste se registrovali. Za zavrsetak procea registracije kliknite na link: ";
-        String messageBody = message + " \r\n" + confirmationUrl;
-
-        message += "\n\n U slucaju da imate problema sa gornjim linkom kliknite na: ";
-        final String confirmationUrlBackup = baseUrl + "/api/registration/confirm-token?token=" + token;
-        messageBody += message + " \r\n" + confirmationUrlBackup;
-
-        final SendEmailRequestDto emailRequest = constructEmail(subject, messageBody, user);
-        return emailRequest;
-    }
-
-    private SendEmailRequestDto constructEmail(String subject, String body, User user) {
-        return SendEmailRequestDto.builder()
-                .subject(subject)
-                .body(body)
-                .to(user.getEmail())
-                .from(supportEmail)
-                .build();
-    }
+//    private SendEmailRequestDto constructEmail(String subject, String body, User user) {
+//        return SendEmailRequestDto.builder()
+//                .subject(subject)
+//                .body(body)
+//                .to(user.getEmail())
+//                .from(supportEmail)
+//                .build();
+//    }
 
     @Transactional
     public void saveRegistrationPassword(RegistrationPasswordDto registrationPasswordDto) {

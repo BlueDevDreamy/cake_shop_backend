@@ -17,6 +17,6 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     @Override
     public void onApplicationEvent(final OnRegistrationCompleteEvent event) {
         log.info(event.toString());
-        userRegistrationService.confirmRegistration(event);
+//        userRegistrationService.confirmRegistration(event);
     }
 }

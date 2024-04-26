@@ -38,9 +38,4 @@ public class Address extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @UuidGenerator
-    @JdbcTypeCode(SqlTypes.CHAR)
-    @Column(columnDefinition = "char(36)", nullable = false)
-    private UUID uuid;
 }

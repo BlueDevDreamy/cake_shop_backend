@@ -36,9 +36,4 @@ public class Flavor extends BaseEntity {
     @Column(name = "allergens", nullable = false)
     private String allergens;
 
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @UuidGenerator
-    @JdbcTypeCode(SqlTypes.CHAR)
-    @Column(columnDefinition = "char(36)", nullable = false)
-    private UUID uuid;
 }
