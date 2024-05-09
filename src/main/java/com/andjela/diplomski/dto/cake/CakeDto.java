@@ -1,5 +1,6 @@
 package com.andjela.diplomski.dto.cake;
 
+import com.andjela.diplomski.entity.codebook.Category;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,4 +18,6 @@ public class CakeDto {
     private int minTier;
     private int maxTier;
     private String imageUrl;
+    private Category category;
+//    private Long categoryId;
 }

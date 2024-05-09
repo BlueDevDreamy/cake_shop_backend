@@ -1,6 +1,7 @@
 package com.andjela.diplomski.entity;
 
 import com.andjela.diplomski.common.BaseEntity;
+import com.andjela.diplomski.entity.codebook.Category;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,4 +44,13 @@ public class Cake extends BaseEntity {
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Category category;
+
+    @Override
+    public String toString() {
+        return "Cake{" +
+                "title='" + title + '\'' +
+                '}';
+    }
 }

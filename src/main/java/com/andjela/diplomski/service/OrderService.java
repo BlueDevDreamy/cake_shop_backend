@@ -49,8 +49,8 @@ public class OrderService implements IOrderService {
 
         for (CartItemDto item : cartDto.getCartItems()) {
             OrderItem orderItem = OrderItem.builder()
-                    .cake(item.getCake())
-                    .userId(item.getUserId())
+//                    .cake(item.getCake())
+//                    .userId(item.getUserId())
                     .createdAt(LocalDateTime.now())
                     .build();
             OrderItem createdOrderItem = orderItemRepository.save(orderItem);

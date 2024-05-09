@@ -10,6 +10,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -30,7 +31,7 @@ public class Cart extends BaseEntity {
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     @Column(name = "cart_items")
-    private Set<CartItem> cartItems;
+    private List<CartItem> cartItems;
 
     @Column(name = "total_price")
     private int totalPrice;
@@ -44,4 +45,16 @@ public class Cart extends BaseEntity {
     @Column(name = "discount")
     private int discount;
 
+    @Override
+    public String toString() {
+        return "Cart{" +
+                "id=" + id +
+                ", user=" + user +
+                ", cartItems=" + cartItems +
+                ", totalPrice=" + totalPrice +
+                ", totalItem=" + totalItem +
+                ", totalDiscountedPrice=" + totalDiscountedPrice +
+                ", discount=" + discount +
+                '}';
+    }
 }

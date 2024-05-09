@@ -19,12 +19,14 @@ public class AdminCakeController {
 
     private final CakeService cakeService;
 
+    //Istestirano u POSTMAN-u
     @PostMapping
     public ResponseEntity<CakeDto> createCake(@RequestBody CakeDto req) {
         CakeDto cakeDto = cakeService.createCake(req);
         return new ResponseEntity<>(cakeDto, HttpStatus.CREATED);
     }
 
+    //Istestirano u POSTMAN-u
     @PostMapping("create-multiple")
     public ResponseEntity<List<CakeDto>> createMultipleCakes(@RequestBody CakeDto[] req) {
         List<CakeDto> cakeDtoList = new ArrayList<>();
@@ -35,18 +37,21 @@ public class AdminCakeController {
         return new ResponseEntity<>(cakeDtoList, HttpStatus.CREATED);
     }
 
+    //Istestirano u POSTMAN-u
     @GetMapping
     public ResponseEntity<List<CakeDto>> getAllCakes() {
         List<CakeDto> cakeDtoList = cakeService.getCakes();
         return new ResponseEntity<>(cakeDtoList, HttpStatus.OK);
     }
 
+    //Istestirano u POSTMAN-u
     @PutMapping("{id}")
     public ResponseEntity<CakeDto> updateCake(@PathVariable Long id, @RequestBody CakeDto req) {
         CakeDto cakeDto = cakeService.updateCake(id, req);
         return new ResponseEntity<>(cakeDto, HttpStatus.OK);
     }
 
+    //Istestirano u POSTMAN-u
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteCake(@PathVariable Long id) {
         cakeService.deleteCake(id);

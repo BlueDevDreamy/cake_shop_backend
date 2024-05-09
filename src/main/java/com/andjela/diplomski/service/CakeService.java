@@ -3,15 +3,21 @@ package com.andjela.diplomski.service;
 import com.andjela.diplomski.dto.cake.CakeDto;
 import com.andjela.diplomski.dto.cake.CakeMapper;
 import com.andjela.diplomski.entity.Cake;
+import com.andjela.diplomski.entity.codebook.Category;
 import com.andjela.diplomski.exception.DataNotValidException;
 import com.andjela.diplomski.exception.ResourceNotFoundException;
 import com.andjela.diplomski.repository.CakeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +56,7 @@ public class CakeService implements ICakeService {
                 .minTier(cakeDto.getMinTier())
                 .maxTier(cakeDto.getMaxTier())
                 .imageUrl(cakeDto.getImageUrl())
+                .category(cakeDto.getCategory())
                 .build();
 
         cakeRepository.save(cake);
@@ -130,6 +137,12 @@ public class CakeService implements ICakeService {
             isChanged = true;
             foundCake.setImageUrl(cakeDto.getImageUrl());
         }
+        if (cakeDto.getCategory() == null) {
+            throw new DataNotValidException("Category must not be empty");
+        } else {
+            isChanged = true;
+            foundCake.setCategory(cakeDto.getCategory());
+        }
 
         if (isChanged) {
             foundCake.setUpdatedAt(LocalDateTime.now());
@@ -147,4 +160,32 @@ public class CakeService implements ICakeService {
         }
         cakeRepository.deleteById(cakeId);
     }
+
+    @Override
+    public List<CakeDto> findCakeByCategory(String category) {
+        List<Cake> cakes = cakeRepository.findByCategory(category);
+        return CakeMapper.MAPPER.mapToListCakeDto(cakes);
+    }
+
+    @Override
+    public List<CakeDto> searchCakes(String query) {
+        List<Cake> cakes = cakeRepository.searchCakes(query);
+        System.out.println("cakes --- " + cakes);
+        return CakeMapper.MAPPER.mapToListCakeDto(cakes);
+    }
+
+    @Override
+    public Page<Cake> getAllCakesPageable(String category, int minWeight, int maxWeight, int minTier, int maxTier, String sort, Integer pageNumber, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
+        List<Cake> cakes = cakeRepository.filterCakes(category, minWeight, maxWeight, minTier, maxTier, sort);
+
+        int startIndex = (int) pageable.getOffset();
+        int endIndex = Math.min(startIndex + pageable.getPageSize(), cakes.size());
+
+        List<Cake> pageContent = cakes.subList(startIndex, endIndex);
+        Page<Cake> filteredCakes = new PageImpl<>(pageContent, pageable, cakes.size());
+        return filteredCakes;
+    }
+
 }

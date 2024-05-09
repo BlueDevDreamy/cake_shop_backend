@@ -37,6 +37,7 @@ public class CartItem extends BaseEntity {
     @Column(name = "total_price", nullable = false)
     private int totalPrice;
 
+    @JsonIgnore
     @ManyToOne
     private Cake cake;
 
@@ -50,16 +51,26 @@ public class CartItem extends BaseEntity {
     private int fakeTier;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne ()
     private Cart cart;
 
     @Column(name = "user_id")
     private Long userId;
 
-
-//    @GeneratedValue(strategy = GenerationType.UUID)
-//    @UuidGenerator
-//    @JdbcTypeCode(SqlTypes.CHAR)
-//    @Column(columnDefinition = "char(36)", nullable = false)
-//    private UUID uuid;
+    @Override
+    public String toString() {
+        return "CartItem{" +
+                "id=" + id +
+                ", selectedWeight=" + selectedWeight +
+                ", selectedTiers=" + selectedTiers +
+                ", piecesNumber=" + piecesNumber +
+                ", totalPrice=" + totalPrice +
+                ", cake=" + cake +
+                ", flavors=" + flavors +
+                ", note='" + note + '\'' +
+                ", fakeTier=" + fakeTier +
+                ", cart=" + cart +
+                ", userId=" + userId +
+                '}';
+    }
 }

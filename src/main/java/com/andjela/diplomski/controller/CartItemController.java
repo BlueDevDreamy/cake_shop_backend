@@ -19,13 +19,12 @@ public class CartItemController {
     private final CartItemService cartItemService;
     private final UserService userService;
 
-    //ToDo createCartItem
-    @PostMapping
-    public ResponseEntity<CartItemDto> createCartItem(CartItemDto c, @RequestHeader("Authorization") String jwt){
-        User user = userService.getUserByJwt(jwt);
-        CartItemDto cartItemDto = cartItemService.createCartItem(c);
-        return new ResponseEntity<>(cartItemDto, HttpStatus.CREATED);
-    }
+//    @PostMapping
+//    public ResponseEntity<CartItemDto> createCartItem(CartItemDto c, @RequestHeader("Authorization") String jwt){
+//        User user = userService.getUserByJwt(jwt);
+//        CartItemDto cartItemDto = cartItemService.createCartItem(c);
+//        return new ResponseEntity<>(cartItemDto, HttpStatus.CREATED);
+//    }
     @PutMapping("{id}")
     public ResponseEntity<CartItemDto> updateCartItem(@RequestBody CartItemDto cartItemDto, @PathVariable Long id, @RequestHeader("Authorization") String jwt){
         User user = userService.getUserByJwt(jwt);

@@ -19,38 +19,50 @@ import java.util.List;
 public class UserCakeController {
     private final CakeService cakeService;
 
-    //ToDo getCakesPageable
-//    @GetMapping("/cakes")
-//    public ResponseEntity<Page<Cake>> getProductByCategory(@RequestParam String category,
-//                                                           @RequestParam List<String> flavor,
-//                                                           @RequestParam int minPrice,
-//                                                           @RequestParam int maxPrice,
-//                                                           @RequestParam String sort,
-//                                                           @RequestParam int pageNumber,
-//                                                           @RequestParam int pageSize) {
-//
-//
-//        Page<Cake> res = cakeService.getCakesPageable(category,
-//                                                                flavor,
-//                                                                minPrice,
-//                                                                maxPrice,
-//                                                                sort,
-//                                                                pageNumber,
-//                                                                pageSize);
-//
-//        System.out.println("complete products");
-//        return new ResponseEntity<>(res, HttpStatus.ACCEPTED);
-//    }
+    //Istestirano u POSTMAN-u
+    @GetMapping("/cakes")
+    public ResponseEntity<Page<Cake>> getAllCakesPageable(@RequestParam String category,
+                                                         @RequestParam int minWeight,
+                                                         @RequestParam int maxWeight,
+                                                         @RequestParam int minTier,
+                                                         @RequestParam int maxTier,
+                                                         @RequestParam String sort,
+                                                         @RequestParam int pageNumber,
+                                                         @RequestParam int pageSize) {
 
+
+        Page<Cake> res = cakeService.getAllCakesPageable(category,
+                minWeight,
+                maxWeight,
+                minTier,
+                maxTier,
+                sort,
+                pageNumber,
+                pageSize);
+
+        System.out.println("complete cakes");
+        return new ResponseEntity<>(res, HttpStatus.ACCEPTED);
+    }
+
+    //Istestirano u POSTMAN-u
     @GetMapping("/cakes/id/{cakeId}")
     public ResponseEntity<CakeDto> findCakeById(@PathVariable Long cakeId) {
         CakeDto cakeDto = cakeService.getCakeById(cakeId);
         return new ResponseEntity<>(cakeDto, HttpStatus.ACCEPTED);
     }
-    //ToDo searchCake
-//    @GetMapping("/cake/search")
-//    public ResponseEntity<List<CakeDto>> searchCakeHandler(@RequestParam String q) {
-//        List<CakeDto> productsDto = cakeService.searchCake(q);
-//        return new ResponseEntity<>(productsDto, HttpStatus.OK);
-//    }
+
+    //Istestirano u POSTMAN-u
+    @GetMapping("/cake/category")
+    public ResponseEntity<List<CakeDto>> findCakeByCategory(@RequestParam String q) {
+        List<CakeDto> cakeDtoList = cakeService.findCakeByCategory(q);
+        return new ResponseEntity<>(cakeDtoList, HttpStatus.OK);
+    }
+
+    //Istestirano u POSTMAN-u
+    @GetMapping("/cake/search")
+    public ResponseEntity<List<CakeDto>> searchCakeHandler(@RequestParam String q) {
+        List<CakeDto> cakeDtoList = cakeService.searchCakes(q);
+        System.out.println("Lista torti " + cakeDtoList);
+        return new ResponseEntity<>(cakeDtoList, HttpStatus.OK);
+    }
 }

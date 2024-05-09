@@ -16,6 +16,7 @@ import com.andjela.diplomski.repository.*;
 import com.andjela.diplomski.repository.auth.AuthorityRepository;
 import com.andjela.diplomski.repository.auth.PasswordResetTokenRepository;
 import com.andjela.diplomski.repository.auth.RegistrationTokenRepository;
+import com.andjela.diplomski.security.JwtTokenProvider;
 import com.andjela.diplomski.service.auth.RegistrationTokenService;
 import com.andjela.diplomski.utils.AuthHelper;
 import com.andjela.diplomski.utils.RequestHelper;
@@ -38,6 +39,7 @@ import java.util.stream.Collectors;
 public class UserService implements IUserService {
 
     private final UserRepository userRepository;
+    private final JwtTokenProvider jwtTokenProvider;
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final RegistrationTokenRepository registrationTokenRepository;
     private final AuthorityRepository authorityRepository;
@@ -59,10 +61,10 @@ public class UserService implements IUserService {
     public List<UserDto> getAllUser() {
         List<UserDto> foundUsers = new ArrayList<>();
         List<User> users = userRepository.findAll();
-        if (users.isEmpty()){
+        if (users.isEmpty()) {
             throw new ResourceNotFoundException("List of users is empty");
         }
-        for (User u : users){
+        for (User u : users) {
             UserDto userDTO = UserMapper.MAPPER.mapToUserDTO(u);
             foundUsers.add(userDTO);
         }
@@ -85,13 +87,13 @@ public class UserService implements IUserService {
 
         if (userDto.getEmail() == null || !userDto.getEmail().matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")) {
             throw new DataNotValidException("Email is not in a valid format");
-        } else  {
+        } else {
             isChanged = true;
             updatedUser.setEmail(user.getEmail());
         }
         if (userDto.getPassword() == null || userDto.getPassword().trim().isEmpty() || !userDto.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$")) {
             throw new DataNotValidException("Password is not in a valid format");
-        } else  {
+        } else {
             isChanged = true;
             updatedUser.setPassword(user.getPassword());
         }
@@ -103,18 +105,18 @@ public class UserService implements IUserService {
         }
         if (userDto.getLastName() == null || userDto.getLastName().trim().isEmpty() || !userDto.getLastName().matches("^[A-Z][a-z ]*$")) {
             throw new DataNotValidException("Last name is not in a valid format");
-        } else  {
+        } else {
             isChanged = true;
             updatedUser.setLastName(user.getLastName());
         }
         if (userDto.getPhoneNumber() == null || userDto.getPhoneNumber().trim().isEmpty() || !userDto.getPhoneNumber().matches("^[0-9 ]+$")) {
             throw new DataNotValidException("Phone number is not in a valid format");
-        } else  {
+        } else {
             isChanged = true;
             updatedUser.setPhoneNumber(user.getPhoneNumber());
         }
 
-        if (isChanged){
+        if (isChanged) {
             updatedUser.setUpdatedAt(LocalDateTime.now());
             savedUser = userRepository.save(updatedUser);
         }
@@ -132,6 +134,11 @@ public class UserService implements IUserService {
 
     @Override
     public User getUserByJwt(String jwt) throws ResourceNotFoundException {
-        return null;
+        String email = jwtTokenProvider.getEmailFromJwtToken(jwt);
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User with email " + email + " could not be found"));
+        if (user == null) {
+            throw new UserException("user not exist with email " + email);
+        }
+        return user;
     }
 }

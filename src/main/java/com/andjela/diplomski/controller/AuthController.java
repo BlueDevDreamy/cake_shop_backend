@@ -23,18 +23,19 @@ public class AuthController {
     private final AuthService authService;
     private final RefreshTokenService refreshTokenService;
 
+    //Istestirano u POSTMAN-u
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto request) {
         LoginResponseDto responseDto = authService.login(request);
         return ResponseEntity.ok(responseDto);
     }
 
+    //Istestirano u POSTMAN-u
     @PostMapping("/refreshtoken")
     public ResponseEntity<?> refreshToken(@Valid @RequestBody TokenRefreshRequestDto request) {
         String requestRefreshToken = request.getRefreshToken();
         TokenRefreshResponseDto tokenRefreshResponseDto = refreshTokenService.refreshToken(requestRefreshToken);
         return ResponseEntity.ok(tokenRefreshResponseDto);
     }
-    //Dodato iz klipa
 
 }

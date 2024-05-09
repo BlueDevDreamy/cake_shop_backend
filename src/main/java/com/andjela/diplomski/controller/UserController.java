@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private final UserService userService;
 
+    //Istestirano u POSTMAN-u
     @GetMapping("/profile")
     public ResponseEntity<UserDto> getUserProfile(@RequestHeader("Authorization") String jwt) {
         User user = userService.getUserByJwt(jwt);

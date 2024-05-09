@@ -33,8 +33,10 @@ public class CartItemService implements ICartItemService {
     @Override
     public CartItemDto createCartItem(CartItemDto cartItemDto) {
         CartItem cartItem = CartItemMapper.MAPPER.mapToCartItem(cartItemDto);
-        Cake cake = cakeRepository.findById(cartItem.getCake().getId()).orElseThrow(() -> new ResourceNotFoundException("Didn't find cake with id " + cartItemDto.getCake().getId()));
-        Cart cart = cartRepository.findById(cartItem.getCart().getId()).orElseThrow(() -> new ResourceNotFoundException("Didn't find cart with id " + cartItem.getCart().getId()));
+        System.out.println(cartItemDto.getNote());
+//        Cake cake = cakeRepository.findById(cartItem.getCake().getId()).orElseThrow(() -> new ResourceNotFoundException("Didn't find cake with id " + cartItemDto.getCakeId()));
+        Cake cake = cakeRepository.findById(cartItemDto.getCakeId()).orElseThrow(() -> new ResourceNotFoundException("Didn't find cake with id " + cartItemDto.getCakeId()));
+//        Cart cart = cartRepository.findById(cartItemDto.getCart().getId()).orElseThrow(() -> new ResourceNotFoundException("Didn't find cart with id " + cartItem.getCart().getId()));
 
         CartItem createCartItem = CartItem.builder()
                 .selectedWeight(cartItemDto.getSelectedWeight())
@@ -46,7 +48,7 @@ public class CartItemService implements ICartItemService {
                 .flavors(cartItemDto.getFlavors())
                 .note(cartItemDto.getNote())
                 .fakeTier(cartItemDto.getFakeTier())
-                .cart(cart)
+                .cart(cartItemDto.getCart())
                 .userId(cartItem.getUserId())
                 .build();
         cartItemRepository.save(createCartItem);
@@ -57,7 +59,7 @@ public class CartItemService implements ICartItemService {
     public CartItemDto updateCartItem(Long userId, Long id, CartItemDto cartItemDto) {
         CartItem cartItem = CartItemMapper.MAPPER.mapToCartItem(cartItemDto);
         CartItem updatedCartItem = cartItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Didn't find cart item with id: " + id));
-        Cake cake = cakeRepository.findById(cartItemDto.getCake().getId()).orElseThrow(() -> new ResourceNotFoundException("Didn't find cake with id " + cartItemDto.getCake().getId()));
+        Cake cake = cakeRepository.findById(cartItemDto.getCakeId()).orElseThrow(() -> new ResourceNotFoundException("Didn't find cake with id " + cartItemDto.getCakeId()));
         UserDto userDto = userService.getUserById(userId);
 
         if (userDto.getId().equals(userId)) {
@@ -78,8 +80,16 @@ public class CartItemService implements ICartItemService {
     @Override
     public CartItemDto isCartItemExists(CartDto cartDto, CakeDto cakeDto, Long userId) {
         Cart cart = CartMapper.MAPPER.mapToCart(cartDto);
+        System.out.println("Cart " + cart);
+        System.out.println("Cart DTO " + cartDto);
+
+
         Cake cake = CakeMapper.MAPPER.mapToCake(cakeDto);
+        System.out.println("Cake " + cake);
+
         CartItem cartItem = cartItemRepository.isCartItemExists(cart, cake, userId);
+        System.out.println("CartItem  " + cartItem);
+
         return CartItemMapper.MAPPER.mapToCartItemDto(cartItem);
     }
 

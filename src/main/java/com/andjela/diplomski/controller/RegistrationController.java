@@ -30,6 +30,7 @@ public class RegistrationController {
     @Value("${frontend.baseUrl}")
     private String frontBaseUrl;
 
+    //Istestirano u POSTMAN-u
     @PostMapping("register-admin")
     public ResponseEntity<UserDto> registerAdmin(@RequestBody @Valid RegisterAdminDto request){
         UserDto user = userRegistrationService.registerAdmin(request);
@@ -38,6 +39,7 @@ public class RegistrationController {
         return new ResponseEntity<>(user, headers, HttpStatus.CREATED);
     }
 
+    //Istestirano u POSTMAN-u
     @PostMapping("register-employee")
     public ResponseEntity<UserDto> registerEmployee(@RequestBody @Valid RegisterEmployeeDto request){
         UserDto user = userRegistrationService.registerEmployee(request);
@@ -46,6 +48,7 @@ public class RegistrationController {
         return new ResponseEntity<>(user, headers, HttpStatus.CREATED);
     }
 
+    //Istestirano u POSTMAN-u
     @PostMapping("register-client")
     public ResponseEntity<UserDto> registerClient(@RequestBody @Valid RegisterClientDto request){
         UserDto user = userRegistrationService.registerClient(request);
