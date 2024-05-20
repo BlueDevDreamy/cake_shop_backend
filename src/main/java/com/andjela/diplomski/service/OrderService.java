@@ -19,9 +19,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -35,22 +37,34 @@ public class OrderService implements IOrderService {
     private final OrderItemRepository orderItemRepository;
 
     @Override
-    public OrderDto createOrder(UserDto userDto, AddressDto shippingAddress) {
-//        shippingAddress.setUser(userDto);
+    public Order createOrder(User user, AddressDto shippingAddress) {
         Address address = AddressMapper.MAPPER.mapToAddress(shippingAddress);
+        address.setCreatedAt(LocalDateTime.now());
+
+        System.out.println("Address u servisu : " + address);
         addressRepository.save(address);
-        userDto.getAddress().add(address);
-        User user = UserMapper.MAPPER.mapToUser(userDto);
+        //Adresa radi
+
+        user.getAddresses().add(address);
+        System.out.println("User u servisu : " + user);
         userRepository.save(user);
 
         CartDto cartDto = cartService.getUserCart(user.getId());
         Cart cart = CartMapper.MAPPER.mapToCart(cartDto);
         List<OrderItem> orderItems = new ArrayList<>();
 
+        //Nije dobro izmapirano iz CartItem u OrderItem
         for (CartItemDto item : cartDto.getCartItems()) {
             OrderItem orderItem = OrderItem.builder()
-//                    .cake(item.getCake())
-//                    .userId(item.getUserId())
+                    .selectedWeight(item.getSelectedWeight())
+                    .selectedLayers(item.getSelectedTiers())
+                    .piecesNumber(item.getPiecesNumber())
+                    .totalPrice(item.getTotalPrice())
+//                    .cake(item.getCakeId()) Problem je sto je u Dto id
+                    .flavors(item.getFlavors())
+                    .note(item.getNote())
+                    .fakeLayer(item.getFakeTier()) //ToDo ispravitit da se zove FakeTier umesto FakeLayer
+                    .userId(item.getUserId())
                     .createdAt(LocalDateTime.now())
                     .build();
             OrderItem createdOrderItem = orderItemRepository.save(orderItem);
@@ -64,15 +78,20 @@ public class OrderService implements IOrderService {
                 .shippingAddress(address)
                 .orderDate(LocalDateTime.now())
                 .orderStatus("PENDING")
+                .orderNumber(generateOrderNumber())
                 .createdAt(LocalDateTime.now())
                 .build();
-        createdOrder.getPaymentDetails().setPaymentStatus("PENDING");
+        System.out.println("Created order : " + createdOrder);
+
+        //Ovde je problem null
+//        createdOrder.getPaymentDetails().setPaymentStatus("PENDING");
         Order savedOrder = orderRepository.save(createdOrder);
 
         for (OrderItem item : orderItems) {
             item.setOrder(savedOrder);
         }
-        return OrderMapper.MAPPER.mapToOrderDto(savedOrder);
+//        return OrderMapper.MAPPER.mapToOrderDto(savedOrder);
+        return savedOrder;
     }
 
     @Override
@@ -147,5 +166,19 @@ public class OrderService implements IOrderService {
         Order foundOrder = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Didn't find order with id:" + id));
         orderRepository.delete(foundOrder);
         return "Order deleted successfully";
+    }
+
+    private  String generateOrderNumber() {
+        // Dobavljanje trenutnog datuma
+        LocalDate currentDate = LocalDate.now();
+        String formattedDate = currentDate.toString().replace("-", ""); // Formatiranje datuma bez crtica
+
+        // Generisanje UUID
+        UUID uuid = UUID.randomUUID();
+        String uuidString = uuid.toString().substring(0, 4); // Koristimo prvih četiri karaktera UUID-a
+
+        // Spajanje datuma, znaka "-" i UUID-a
+        String orderNumber = formattedDate + "-" + uuidString;
+        return orderNumber;
     }
 }

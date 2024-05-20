@@ -19,18 +19,15 @@ public class CartItemController {
     private final CartItemService cartItemService;
     private final UserService userService;
 
-//    @PostMapping
-//    public ResponseEntity<CartItemDto> createCartItem(CartItemDto c, @RequestHeader("Authorization") String jwt){
-//        User user = userService.getUserByJwt(jwt);
-//        CartItemDto cartItemDto = cartItemService.createCartItem(c);
-//        return new ResponseEntity<>(cartItemDto, HttpStatus.CREATED);
-//    }
+    //Istestirano u POSTMAN-u
+    //CakeId je null?
     @PutMapping("{id}")
     public ResponseEntity<CartItemDto> updateCartItem(@RequestBody CartItemDto cartItemDto, @PathVariable Long id, @RequestHeader("Authorization") String jwt){
         User user = userService.getUserByJwt(jwt);
         CartItemDto updatedCartItemDto = cartItemService.updateCartItem(user.getId(), id, cartItemDto);
         return new ResponseEntity<>(updatedCartItemDto, HttpStatus.OK);
     }
+    //Istestirano u POSTMAN-u
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteCartItem(@PathVariable Long id, @RequestHeader("Authorization") String jwt){
         User user = userService.getUserByJwt(jwt);

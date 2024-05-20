@@ -57,6 +57,7 @@ public class CakeService implements ICakeService {
                 .maxTier(cakeDto.getMaxTier())
                 .imageUrl(cakeDto.getImageUrl())
                 .category(cakeDto.getCategory())
+                .createdAt(LocalDateTime.now())
                 .build();
 
         cakeRepository.save(cake);

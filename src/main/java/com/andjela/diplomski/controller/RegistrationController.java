@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 public class RegistrationController {
 
     private final UserRegistrationService userRegistrationService;
+    private final CartService cartService;
 
     @Value("${frontend.baseUrl}")
     private String frontBaseUrl;
@@ -49,9 +50,11 @@ public class RegistrationController {
     }
 
     //Istestirano u POSTMAN-u
+    //Cim se klijen t registruje dodeljuje mu se cart
     @PostMapping("register-client")
     public ResponseEntity<UserDto> registerClient(@RequestBody @Valid RegisterClientDto request){
         UserDto user = userRegistrationService.registerClient(request);
+        cartService.createCart(user);
 
         final HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<>(user, headers, HttpStatus.CREATED);

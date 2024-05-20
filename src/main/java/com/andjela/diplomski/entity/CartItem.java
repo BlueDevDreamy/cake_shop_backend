@@ -29,7 +29,7 @@ public class CartItem extends BaseEntity {
     private double selectedWeight;
 
     @Column(nullable = false, name = "selected_tiers")
-    private double selectedTiers;
+    private int selectedTiers;
 
     @Column(name = "pieces_number")
     private int piecesNumber;

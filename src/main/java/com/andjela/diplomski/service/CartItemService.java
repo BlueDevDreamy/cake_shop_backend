@@ -80,27 +80,23 @@ public class CartItemService implements ICartItemService {
     @Override
     public CartItemDto isCartItemExists(CartDto cartDto, CakeDto cakeDto, Long userId) {
         Cart cart = CartMapper.MAPPER.mapToCart(cartDto);
-        System.out.println("Cart " + cart);
-        System.out.println("Cart DTO " + cartDto);
-
-
         Cake cake = CakeMapper.MAPPER.mapToCake(cakeDto);
-        System.out.println("Cake " + cake);
-
         CartItem cartItem = cartItemRepository.isCartItemExists(cart, cake, userId);
-        System.out.println("CartItem  " + cartItem);
-
+        if(cartItem == null) {
+            throw new ResourceNotFoundException("No such cart item exists");
+        }
         return CartItemMapper.MAPPER.mapToCartItemDto(cartItem);
     }
 
-    //ToDo check wht there is unreachable statement
     @Override
     public String removeCartItem(Long userId, Long cartItemId) {
         CartItemDto cartItemDto = findCartItemById(cartItemId);
         CartItem cartItem = CartItemMapper.MAPPER.mapToCartItem(cartItemDto);
+
         UserDto userDto = userService.getUserById(cartItem.getUserId());
         UserDto foundUserDto = userService.getUserById(userId);
-        if (userDto.getId().equals(foundUserDto)) {
+
+        if (userDto.getId().equals(foundUserDto.getId())) {
             cartItemRepository.deleteById(cartItemId);
         } else {
             throw new ResourceNotFoundException("You can't remove another users item");

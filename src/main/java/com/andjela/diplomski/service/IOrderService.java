@@ -4,11 +4,15 @@ import com.andjela.diplomski.dto.address.AddressDto;
 import com.andjela.diplomski.dto.order.OrderDto;
 import com.andjela.diplomski.dto.user.UserDto;
 import com.andjela.diplomski.entity.Address;
+import com.andjela.diplomski.entity.Order;
+import com.andjela.diplomski.entity.User;
 
 import java.util.List;
 
 public interface IOrderService {
-    OrderDto createOrder(UserDto user, AddressDto shippingAddress);
+//    OrderDto createOrder(UserDto user, AddressDto shippingAddress);
+    Order createOrder(User user, AddressDto shippingAddress);
+
     OrderDto getOrderById(Long id);
     List<OrderDto> usersOrderHistory(Long userId);
     OrderDto placeOrder(Long id);

@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UuidGenerator;
@@ -34,6 +35,7 @@ public class Address extends BaseEntity {
     private String zipCode;
 
 //    @JsonIgnore
+//    @ToString.Exclude
 //    @ManyToOne
 //    @JoinColumn(name = "user_id")
 //    private User user;
