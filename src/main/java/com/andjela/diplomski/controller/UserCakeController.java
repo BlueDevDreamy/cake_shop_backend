@@ -65,4 +65,9 @@ public class UserCakeController {
         System.out.println("Lista torti " + cakeDtoList);
         return new ResponseEntity<>(cakeDtoList, HttpStatus.OK);
     }
+    @GetMapping
+    public ResponseEntity<List<CakeDto>> findAllCakes() {
+        List<CakeDto> cakeDtoList = cakeService.getAllCakes();
+        return new ResponseEntity<>(cakeDtoList, HttpStatus.OK);
+    }
 }

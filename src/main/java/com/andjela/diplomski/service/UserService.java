@@ -6,6 +6,7 @@ import com.andjela.diplomski.dto.auth.*;
 import com.andjela.diplomski.dto.user.UserDto;
 import com.andjela.diplomski.dto.user.UserData;
 import com.andjela.diplomski.dto.user.UserMapper;
+import com.andjela.diplomski.dto.user.UserUpdateDto;
 import com.andjela.diplomski.entity.Authority;
 import com.andjela.diplomski.entity.PasswordResetToken;
 import com.andjela.diplomski.entity.RegistrationToken;
@@ -28,9 +29,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -78,49 +77,18 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserDto updateUser(Long id, UserDto userDto) {
-        User user = UserMapper.MAPPER.mapToUser(userDto);
+    public UserDto updateUser(Long id, UserUpdateDto userUpdateDto) {
         User updatedUser = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Entity whit id " + id + " could not be updated"));
-        User savedUser = new User();
+        updatedUser.setFirstName(userUpdateDto.getFirstName());
+        updatedUser.setLastName(userUpdateDto.getLastName());
+        updatedUser.setEmail(userUpdateDto.getEmail());
+        updatedUser.setPassword(userUpdateDto.getPassword());
+        updatedUser.setPhoneNumber(userUpdateDto.getPhoneNumber());
+        updatedUser.setUpdatedAt(LocalDateTime.now());
 
-        boolean isChanged = false;
+        userRepository.save(updatedUser);
 
-        if (userDto.getEmail() == null || !userDto.getEmail().matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")) {
-            throw new DataNotValidException("Email is not in a valid format");
-        } else {
-            isChanged = true;
-            updatedUser.setEmail(user.getEmail());
-        }
-        if (userDto.getPassword() == null || userDto.getPassword().trim().isEmpty() || !userDto.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$")) {
-            throw new DataNotValidException("Password is not in a valid format");
-        } else {
-            isChanged = true;
-            updatedUser.setPassword(user.getPassword());
-        }
-        if (userDto.getFirstName() == null || userDto.getFirstName().trim().isEmpty() || !userDto.getFirstName().matches("^[A-Z][a-z ]*$")) {
-            throw new DataNotValidException("First name is not in a valid format");
-        } else {
-            isChanged = true;
-            updatedUser.setFirstName(user.getFirstName());
-        }
-        if (userDto.getLastName() == null || userDto.getLastName().trim().isEmpty() || !userDto.getLastName().matches("^[A-Z][a-z ]*$")) {
-            throw new DataNotValidException("Last name is not in a valid format");
-        } else {
-            isChanged = true;
-            updatedUser.setLastName(user.getLastName());
-        }
-        if (userDto.getPhoneNumber() == null || userDto.getPhoneNumber().trim().isEmpty() || !userDto.getPhoneNumber().matches("^[0-9 ]+$")) {
-            throw new DataNotValidException("Phone number is not in a valid format");
-        } else {
-            isChanged = true;
-            updatedUser.setPhoneNumber(user.getPhoneNumber());
-        }
-
-        if (isChanged) {
-            updatedUser.setUpdatedAt(LocalDateTime.now());
-            savedUser = userRepository.save(updatedUser);
-        }
-        return UserMapper.MAPPER.mapToUserDTO(savedUser);
+        return UserMapper.MAPPER.mapToUserDTO(updatedUser);
     }
 
     @Override

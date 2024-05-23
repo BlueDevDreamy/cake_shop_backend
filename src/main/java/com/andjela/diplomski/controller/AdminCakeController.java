@@ -1,7 +1,10 @@
 package com.andjela.diplomski.controller;
 
+import com.andjela.diplomski.dto.cake.CakeCreateDto;
 import com.andjela.diplomski.dto.cake.CakeDto;
+import com.andjela.diplomski.dto.cake.CakeUpdateDto;
 import com.andjela.diplomski.service.CakeService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,21 +24,22 @@ public class AdminCakeController {
 
     //Istestirano u POSTMAN-u
     @PostMapping
-    public ResponseEntity<CakeDto> createCake(@RequestBody CakeDto req) {
+    public ResponseEntity<CakeDto> createCake(@Valid @RequestBody CakeCreateDto req) {
         CakeDto cakeDto = cakeService.createCake(req);
         return new ResponseEntity<>(cakeDto, HttpStatus.CREATED);
     }
 
+    //Sa novim CreateDto ne verujm da moze multuiple kreiranje
     //Istestirano u POSTMAN-u
-    @PostMapping("create-multiple")
-    public ResponseEntity<List<CakeDto>> createMultipleCakes(@RequestBody CakeDto[] req) {
-        List<CakeDto> cakeDtoList = new ArrayList<>();
-        for (CakeDto cakeDto : req) {
-            cakeService.createCake(cakeDto);
-            cakeDtoList.add(cakeDto);
-        }
-        return new ResponseEntity<>(cakeDtoList, HttpStatus.CREATED);
-    }
+//    @PostMapping("create-multiple")
+//    public ResponseEntity<List<CakeDto>> createMultipleCakes(@RequestBody CakeCreateDto[] req) {
+//        List<CakeDto> cakeDtoList = new ArrayList<>();
+//        for (CakeCreateDto cakeCreateDto : req) {
+//            cakeService.createCake(cakeCreateDto);
+//            cakeDtoList.add(cakeCreateDto);
+//        }
+//        return new ResponseEntity<>(cakeDtoList, HttpStatus.CREATED);
+//    }
 
     //Istestirano u POSTMAN-u
     @GetMapping
@@ -46,7 +50,7 @@ public class AdminCakeController {
 
     //Istestirano u POSTMAN-u
     @PutMapping("{id}")
-    public ResponseEntity<CakeDto> updateCake(@PathVariable Long id, @RequestBody CakeDto req) {
+    public ResponseEntity<CakeDto> updateCake(@PathVariable Long id, @Valid @RequestBody CakeUpdateDto req) {
         CakeDto cakeDto = cakeService.updateCake(id, req);
         return new ResponseEntity<>(cakeDto, HttpStatus.OK);
     }

@@ -1,6 +1,7 @@
 package com.andjela.diplomski.service;
 
 import com.andjela.diplomski.dto.user.UserDto;
+import com.andjela.diplomski.dto.user.UserUpdateDto;
 import com.andjela.diplomski.entity.User;
 import com.andjela.diplomski.exception.ResourceNotFoundException;
 
@@ -10,7 +11,7 @@ public interface IUserService {
 
     List<UserDto> getAllUser();
     UserDto getUserById(Long id);
-    UserDto updateUser(Long id, UserDto updatedUserUpdateDTO);
+    UserDto updateUser(Long id, UserUpdateDto userUpdateDto);
     void deleteUser(Long id);
 
 //    User getUserById(Long id) throws UserException;

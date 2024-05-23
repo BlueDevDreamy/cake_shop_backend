@@ -9,7 +9,10 @@ import java.util.List;
 @Mapper
 public interface CakeMapper {
     CakeMapper MAPPER = Mappers.getMapper(CakeMapper.class);
+
     CakeDto mapToCakeDto(Cake cake);
     Cake mapToCake(CakeDto cakeDto);
     List<CakeDto> mapToListCakeDto(List<Cake> cakes);
+
+    CakeDto maptToCakeDto(CakeCreateDto cakeCreateDto);
 }

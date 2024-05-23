@@ -172,21 +172,6 @@ public class UserRegistrationService {
 
         String passwordEncoded = request.getPassword() != null ? passwordEncoder.encode(request.getPassword()) : null;
 
-        if (request.getEmail() == null || !request.getEmail().matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")) {
-            throw new DataNotValidException("Email is not in a valid format");
-        }
-        if (request.getPassword() == null || request.getPassword().trim().isEmpty() || !request.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$")) {
-            throw new DataNotValidException("Password is not in a valid format");
-        }
-        if (request.getFirstName() == null || request.getFirstName().trim().isEmpty() || !request.getFirstName().matches("^[A-Z][a-z ]*$")) {
-            throw new DataNotValidException("First name is not in a valid format");
-        }
-        if (request.getLastName() == null || request.getLastName().trim().isEmpty() || !request.getLastName().matches("^[A-Z][a-z ]*$")) {
-            throw new DataNotValidException("Last name is not in a valid format");
-        }
-        if (request.getPhoneNumber() == null || request.getPhoneNumber().trim().isEmpty() || !request.getPhoneNumber().matches("^(\\+)(3816)([0-9]){6,9}$")) {
-            throw new DataNotValidException("Phone number is not in a valid format");
-        }
         User user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())

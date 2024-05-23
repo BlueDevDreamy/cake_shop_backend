@@ -17,3 +17,4 @@ public interface UserMapper {
     UserCreateDto mapToUserCreateDTO(User user);
     User mapCreateToUser(UserCreateDto userCreateDTO);
 }
+

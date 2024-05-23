@@ -46,7 +46,7 @@ public class SecurityConfig {
         http.cors(c -> {
             CorsConfigurationSource source = request -> {
                 CorsConfiguration config = new CorsConfiguration();
-                config.setAllowedOrigins(List.of("http://localhost:3000", "http://130.61.42.9:3000"));
+                config.setAllowedOrigins(List.of("http://localhost:3000", "172.16.19.121"));
                 config.setAllowedMethods(List.of("*"));
                 config.setAllowedHeaders(List.of("*"));
                 config.setAllowCredentials(true);
