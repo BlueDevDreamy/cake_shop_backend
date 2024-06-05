@@ -44,7 +44,7 @@ public class CartItem extends BaseEntity {
     @OneToMany
     private List<Flavor> flavors;
 
-    @Column(name = "name")
+    @Column(name = "name") //ispraviti da bude note
     private String note;
 
     @Column(name = "fake_tier")

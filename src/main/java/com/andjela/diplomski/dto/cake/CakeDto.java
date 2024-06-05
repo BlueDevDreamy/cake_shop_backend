@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CakeDto {
-
+    private Long id;
     private String title;
     private int pricePerKilo;
     private int decorationPrice;

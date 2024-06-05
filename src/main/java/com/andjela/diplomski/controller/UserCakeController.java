@@ -45,7 +45,7 @@ public class UserCakeController {
     }
 
     //Istestirano u POSTMAN-u
-    @GetMapping("/cakes/id/{cakeId}")
+    @GetMapping("/cakes/{cakeId}")
     public ResponseEntity<CakeDto> findCakeById(@PathVariable Long cakeId) {
         CakeDto cakeDto = cakeService.getCakeById(cakeId);
         return new ResponseEntity<>(cakeDto, HttpStatus.ACCEPTED);
