@@ -41,10 +41,13 @@ public class CartItem extends BaseEntity {
     @ManyToOne
     private Cake cake;
 
-    @OneToMany
-    private List<Flavor> flavors;
+//    @OneToMany
+//    private List<Flavor> flavors;
 
-    @Column(name = "name") //ispraviti da bude note
+    @OneToMany(mappedBy = "cartItem", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartItemFlavorTier> cartItemFlavorTiers;
+
+    @Column(name = "note")
     private String note;
 
     @Column(name = "fake_tier")
@@ -66,7 +69,6 @@ public class CartItem extends BaseEntity {
                 ", piecesNumber=" + piecesNumber +
                 ", totalPrice=" + totalPrice +
                 ", cake=" + cake +
-                ", flavors=" + flavors +
                 ", note='" + note + '\'' +
                 ", fakeTier=" + fakeTier +
                 ", cart=" + cart +

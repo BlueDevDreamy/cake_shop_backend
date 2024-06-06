@@ -45,7 +45,7 @@ public class CartItemService implements ICartItemService {
                 .piecesNumber(cartItemDto.getPiecesNumber())
                 .totalPrice(cartItemDto.getTotalPrice())
                 .cake(cake)
-                .flavors(cartItemDto.getFlavors())
+//                .flavors(cartItemDto.getFlavors())
                 .note(cartItemDto.getNote())
                 .fakeTier(cartItemDto.getFakeTier())
                 .cart(cartItemDto.getCart())
@@ -68,7 +68,7 @@ public class CartItemService implements ICartItemService {
             updatedCartItem.setPiecesNumber(cartItem.getPiecesNumber());
             updatedCartItem.setTotalPrice(cartItem.getTotalPrice());
             updatedCartItem.setCake(cake);
-            updatedCartItem.setFlavors(cartItem.getFlavors());
+//            updatedCartItem.setFlavors(cartItem.getFlavors());
             updatedCartItem.setNote(cartItem.getNote());
             updatedCartItem.setFakeTier(cartItem.getFakeTier());
             updatedCartItem.setCart(cartItemDto.getCart());
