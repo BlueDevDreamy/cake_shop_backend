@@ -38,60 +38,61 @@ public class OrderService implements IOrderService {
 
     @Override
     public Order createOrder(User user, AddressDto shippingAddress) {
-        Address address = AddressMapper.MAPPER.mapToAddress(shippingAddress);
-        address.setCreatedAt(LocalDateTime.now());
-
-        System.out.println("Address u servisu : " + address);
-        addressRepository.save(address);
-        //Adresa radi
-
-        user.getAddresses().add(address);
-        System.out.println("User u servisu : " + user);
-        userRepository.save(user);
-
-        CartDto cartDto = cartService.getUserCart(user.getId());
-        Cart cart = CartMapper.MAPPER.mapToCart(cartDto);
-        List<OrderItem> orderItems = new ArrayList<>();
-
-        //Nije dobro izmapirano iz CartItem u OrderItem
-        for (CartItemDto item : cartDto.getCartItems()) {
-            OrderItem orderItem = OrderItem.builder()
-                    .selectedWeight(item.getSelectedWeight())
-                    .selectedLayers(item.getSelectedTiers())
-                    .piecesNumber(item.getPiecesNumber())
-                    .totalPrice(item.getTotalPrice())
-//                    .cake(item.getCakeId()) Problem je sto je u Dto id
-                    .flavors(item.getFlavors())
-                    .note(item.getNote())
-                    .fakeLayer(item.getFakeTier()) //ToDo ispravitit da se zove FakeTier umesto FakeLayer
-                    .userId(item.getUserId())
-                    .createdAt(LocalDateTime.now())
-                    .build();
-            OrderItem createdOrderItem = orderItemRepository.save(orderItem);
-            orderItems.add(createdOrderItem);
-        }
-        Order createdOrder = Order.builder()
-                .user(user)
-                .orderItems(orderItems)
-                .totalPrice(cart.getTotalPrice())
-                .totalItem(cart.getTotalItem())
-                .shippingAddress(address)
-                .orderDate(LocalDateTime.now())
-                .orderStatus("PENDING")
-                .orderNumber(generateOrderNumber())
-                .createdAt(LocalDateTime.now())
-                .build();
-        System.out.println("Created order : " + createdOrder);
-
-        //Ovde je problem null
-//        createdOrder.getPaymentDetails().setPaymentStatus("PENDING");
-        Order savedOrder = orderRepository.save(createdOrder);
-
-        for (OrderItem item : orderItems) {
-            item.setOrder(savedOrder);
-        }
-//        return OrderMapper.MAPPER.mapToOrderDto(savedOrder);
-        return savedOrder;
+//        Address address = AddressMapper.MAPPER.mapToAddress(shippingAddress);
+//        address.setCreatedAt(LocalDateTime.now());
+//
+//        System.out.println("Address u servisu : " + address);
+//        addressRepository.save(address);
+//        //Adresa radi
+//
+//        user.getAddresses().add(address);
+//        System.out.println("User u servisu : " + user);
+//        userRepository.save(user);
+//
+//        CartDto cartDto = cartService.getUserCart(user.getId());
+//        Cart cart = CartMapper.MAPPER.mapToCart(cartDto);
+//        List<OrderItem> orderItems = new ArrayList<>();
+//
+//        //Nije dobro izmapirano iz CartItem u OrderItem
+//        for (CartItemDto item : cartDto.getCartItems()) {
+//            OrderItem orderItem = OrderItem.builder()
+//                    .selectedWeight(item.getSelectedWeight())
+//                    .selectedLayers(item.getSelectedTiers())
+//                    .piecesNumber(item.getPiecesNumber())
+//                    .totalPrice(item.getTotalPrice())
+////                    .cake(item.getCakeId()) Problem je sto je u Dto id
+//                    .flavors(item.getFlavors())
+//                    .note(item.getNote())
+//                    .fakeLayer(item.getFakeTier()) //ToDo ispravitit da se zove FakeTier umesto FakeLayer
+//                    .userId(item.getUserId())
+//                    .createdAt(LocalDateTime.now())
+//                    .build();
+//            OrderItem createdOrderItem = orderItemRepository.save(orderItem);
+//            orderItems.add(createdOrderItem);
+//        }
+//        Order createdOrder = Order.builder()
+//                .user(user)
+//                .orderItems(orderItems)
+//                .totalPrice(cart.getTotalPrice())
+//                .totalItem(cart.getTotalItem())
+//                .shippingAddress(address)
+//                .orderDate(LocalDateTime.now())
+//                .orderStatus("PENDING")
+//                .orderNumber(generateOrderNumber())
+//                .createdAt(LocalDateTime.now())
+//                .build();
+//        System.out.println("Created order : " + createdOrder);
+//
+//        //Ovde je problem null
+////        createdOrder.getPaymentDetails().setPaymentStatus("PENDING");
+//        Order savedOrder = orderRepository.save(createdOrder);
+//
+//        for (OrderItem item : orderItems) {
+//            item.setOrder(savedOrder);
+//        }
+////        return OrderMapper.MAPPER.mapToOrderDto(savedOrder);
+//        return savedOrder;
+        return null;
     }
 
     @Override

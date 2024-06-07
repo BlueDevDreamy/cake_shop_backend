@@ -2,11 +2,12 @@ package com.andjela.diplomski.entity;
 
 import com.andjela.diplomski.common.BaseEntity;
 import com.andjela.diplomski.entity.codebook.Flavor;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UuidGenerator;
@@ -14,12 +15,14 @@ import org.hibernate.type.SqlTypes;
 
 import java.util.List;
 import java.util.UUID;
+
 @SuperBuilder(toBuilder = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "cart_item")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class CartItem extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,8 +56,14 @@ public class CartItem extends BaseEntity {
     @Column(name = "fake_tier")
     private int fakeTier;
 
-    @JsonIgnore
-    @ManyToOne ()
+    //    @JsonIgnore
+////    @JsonManagedReference
+//    @ManyToOne
+////    @JoinColumn(name = "cart_id", nullable = false)
+
+//    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
 
     @Column(name = "user_id")

@@ -32,49 +32,54 @@ public class CartItemService implements ICartItemService {
 
     @Override
     public CartItemDto createCartItem(CartItemDto cartItemDto) {
-        CartItem cartItem = CartItemMapper.MAPPER.mapToCartItem(cartItemDto);
-        System.out.println(cartItemDto.getNote());
-//        Cake cake = cakeRepository.findById(cartItem.getCake().getId()).orElseThrow(() -> new ResourceNotFoundException("Didn't find cake with id " + cartItemDto.getCakeId()));
-        Cake cake = cakeRepository.findById(cartItemDto.getCakeId()).orElseThrow(() -> new ResourceNotFoundException("Didn't find cake with id " + cartItemDto.getCakeId()));
+//        CartItem cartItem = CartItemMapper.MAPPER.mapToCartItem(cartItemDto);
+//        System.out.println(cartItemDto.getNote());
+////        Cake cake = cakeRepository.findById(cartItem.getCake().getId()).orElseThrow(() -> new ResourceNotFoundException("Didn't find cake with id " + cartItemDto.getCakeId()));
+//        Cake cake = cakeRepository.findById(cartItemDto.getCakeId()).orElseThrow(() -> new ResourceNotFoundException("Didn't find cake with id " + cartItemDto.getCakeId()));
 //        Cart cart = cartRepository.findById(cartItemDto.getCart().getId()).orElseThrow(() -> new ResourceNotFoundException("Didn't find cart with id " + cartItem.getCart().getId()));
-
-        CartItem createCartItem = CartItem.builder()
-                .selectedWeight(cartItemDto.getSelectedWeight())
-                .selectedTiers(cartItemDto.getSelectedTiers())
-                //Mozda ovde izracunati pieces number i price
-                .piecesNumber(cartItemDto.getPiecesNumber())
-                .totalPrice(cartItemDto.getTotalPrice())
-                .cake(cake)
-//                .flavors(cartItemDto.getFlavors())
-                .note(cartItemDto.getNote())
-                .fakeTier(cartItemDto.getFakeTier())
-                .cart(cartItemDto.getCart())
-                .userId(cartItem.getUserId())
-                .build();
-        cartItemRepository.save(createCartItem);
-        return CartItemMapper.MAPPER.mapToCartItemDto(createCartItem);
+//
+//        CartItem createCartItem = CartItem.builder()
+//                .selectedWeight(cartItemDto.getSelectedWeight())
+//                .selectedTiers(cartItemDto.getSelectedTiers())
+//                //Mozda ovde izracunati pieces number i price
+//                .piecesNumber(cartItemDto.getPiecesNumber())
+//                .totalPrice(cartItemDto.getTotalPrice())
+//                .cake(cake)
+////                .flavors(cartItemDto.getFlavors())
+//                .note(cartItemDto.getNote())
+//                .fakeTier(cartItemDto.getFakeTier())
+////                .cart(cartItemDto.getCart())
+//                .cart(cart)
+//                .userId(cartItem.getUserId())
+//                .build();
+//        cartItemRepository.save(createCartItem);
+//        return CartItemMapper.MAPPER.mapToCartItemDto(createCartItem);
+        return null;
     }
 
     @Override
     public CartItemDto updateCartItem(Long userId, Long id, CartItemDto cartItemDto) {
-        CartItem cartItem = CartItemMapper.MAPPER.mapToCartItem(cartItemDto);
-        CartItem updatedCartItem = cartItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Didn't find cart item with id: " + id));
-        Cake cake = cakeRepository.findById(cartItemDto.getCakeId()).orElseThrow(() -> new ResourceNotFoundException("Didn't find cake with id " + cartItemDto.getCakeId()));
-        UserDto userDto = userService.getUserById(userId);
-
-        if (userDto.getId().equals(userId)) {
-            updatedCartItem.setSelectedWeight(cartItem.getSelectedWeight());
-            updatedCartItem.setSelectedTiers(cartItem.getSelectedTiers());
-            updatedCartItem.setPiecesNumber(cartItem.getPiecesNumber());
-            updatedCartItem.setTotalPrice(cartItem.getTotalPrice());
-            updatedCartItem.setCake(cake);
-//            updatedCartItem.setFlavors(cartItem.getFlavors());
-            updatedCartItem.setNote(cartItem.getNote());
-            updatedCartItem.setFakeTier(cartItem.getFakeTier());
-            updatedCartItem.setCart(cartItemDto.getCart());
-        }
-        cartItemRepository.save(updatedCartItem);
-        return CartItemMapper.MAPPER.mapToCartItemDto(updatedCartItem);
+//        CartItem cartItem = CartItemMapper.MAPPER.mapToCartItem(cartItemDto);
+//        CartItem updatedCartItem = cartItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Didn't find cart item with id: " + id));
+//        Cake cake = cakeRepository.findById(cartItemDto.getCakeId()).orElseThrow(() -> new ResourceNotFoundException("Didn't find cake with id " + cartItemDto.getCakeId()));
+//        UserDto userDto = userService.getUserById(userId);
+//        Cart cart = cartRepository.findById(cartItemDto.getCart().getId()).orElseThrow(() -> new ResourceNotFoundException("Didn't find cart with id " + cartItem.getCart().getId()));
+//
+//        if (userDto.getId().equals(userId)) {
+//            updatedCartItem.setSelectedWeight(cartItem.getSelectedWeight());
+//            updatedCartItem.setSelectedTiers(cartItem.getSelectedTiers());
+//            updatedCartItem.setPiecesNumber(cartItem.getPiecesNumber());
+//            updatedCartItem.setTotalPrice(cartItem.getTotalPrice());
+//            updatedCartItem.setCake(cake);
+////            updatedCartItem.setFlavors(cartItem.getFlavors());
+//            updatedCartItem.setNote(cartItem.getNote());
+//            updatedCartItem.setFakeTier(cartItem.getFakeTier());
+////            updatedCartItem.setCart(cartItemDto.getCart());
+//            updatedCartItem.setCart(cart);
+//        }
+//        cartItemRepository.save(updatedCartItem);
+//        return CartItemMapper.MAPPER.mapToCartItemDto(updatedCartItem);
+        return null;
     }
 
     @Override

@@ -27,20 +27,11 @@ public class CartController {
         return new ResponseEntity<>(cartDto, HttpStatus.OK);
     }
     //Istestirano u POSTMAN-u
-//    @PutMapping("/add")
-//    public ResponseEntity<String> addItemToCart(@RequestBody CartItemDto req, @RequestHeader("Authorization") String jwt){
-//        User user = userService.getUserByJwt(jwt);
-//        String res  = cartService.addCartItem(user.getId(), req);
-//        return new ResponseEntity<>(res,HttpStatus.ACCEPTED);
-//
-//    }
-
     @PutMapping("/add")
     public ResponseEntity<String> addItemToCart(@RequestBody CartItemCreateDto req, @RequestHeader("Authorization") String jwt){
         User user = userService.getUserByJwt(jwt);
         String res  = cartService.addCartItem(user.getId(), req);
         return new ResponseEntity<>(res,HttpStatus.ACCEPTED);
-
     }
 
 }

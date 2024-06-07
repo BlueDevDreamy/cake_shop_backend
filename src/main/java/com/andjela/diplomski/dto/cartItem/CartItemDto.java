@@ -1,5 +1,6 @@
 package com.andjela.diplomski.dto.cartItem;
 
+import com.andjela.diplomski.dto.cart.CartDto;
 import com.andjela.diplomski.entity.Cake;
 import com.andjela.diplomski.entity.Cart;
 import com.andjela.diplomski.entity.codebook.Flavor;
@@ -22,7 +23,7 @@ public class CartItemDto {
     private List<Flavor> flavors;
     private String note;
     private int fakeTier;
-    private Cart cart;
+//    private CartDto cart;
     private Long userId;
 
     //piece number ne treba da se nalazi u dto, jer ja treba us servicu da izracunam na osnovu unete tezine
@@ -42,7 +43,7 @@ public class CartItemDto {
                 ", flavors=" + flavors +
                 ", note='" + note + '\'' +
                 ", fakeTier=" + fakeTier +
-                ", cart=" + cart +
+//                ", cart=" + cart +
                 ", userId=" + userId +
                 '}';
     }
