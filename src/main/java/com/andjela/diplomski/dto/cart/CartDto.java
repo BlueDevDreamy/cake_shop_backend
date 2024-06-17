@@ -19,7 +19,7 @@ public class CartDto {
     private Long userId; // Referenca na User ID umesto celog objekta
     private List<CartItemDto> cartItems;
     private Integer totalPrice;
-    private int totalItem;
+    private int totalItem; // Ne koristim na frontu, jer je uvek 0
     private Integer totalDiscountedPrice;
     private Integer discount;
 }

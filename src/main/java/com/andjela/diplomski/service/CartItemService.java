@@ -14,6 +14,7 @@ import com.andjela.diplomski.exception.ResourceNotFoundException;
 import com.andjela.diplomski.repository.CakeRepository;
 import com.andjela.diplomski.repository.CartItemRepository;
 import com.andjela.diplomski.repository.CartRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -59,27 +60,69 @@ public class CartItemService implements ICartItemService {
 
     @Override
     public CartItemDto updateCartItem(Long userId, Long id, CartItemDto cartItemDto) {
-//        CartItem cartItem = CartItemMapper.MAPPER.mapToCartItem(cartItemDto);
-//        CartItem updatedCartItem = cartItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Didn't find cart item with id: " + id));
-//        Cake cake = cakeRepository.findById(cartItemDto.getCakeId()).orElseThrow(() -> new ResourceNotFoundException("Didn't find cake with id " + cartItemDto.getCakeId()));
-//        UserDto userDto = userService.getUserById(userId);
-//        Cart cart = cartRepository.findById(cartItemDto.getCart().getId()).orElseThrow(() -> new ResourceNotFoundException("Didn't find cart with id " + cartItem.getCart().getId()));
-//
-//        if (userDto.getId().equals(userId)) {
-//            updatedCartItem.setSelectedWeight(cartItem.getSelectedWeight());
-//            updatedCartItem.setSelectedTiers(cartItem.getSelectedTiers());
-//            updatedCartItem.setPiecesNumber(cartItem.getPiecesNumber());
-//            updatedCartItem.setTotalPrice(cartItem.getTotalPrice());
-//            updatedCartItem.setCake(cake);
-////            updatedCartItem.setFlavors(cartItem.getFlavors());
-//            updatedCartItem.setNote(cartItem.getNote());
-//            updatedCartItem.setFakeTier(cartItem.getFakeTier());
-////            updatedCartItem.setCart(cartItemDto.getCart());
-//            updatedCartItem.setCart(cart);
-//        }
-//        cartItemRepository.save(updatedCartItem);
-//        return CartItemMapper.MAPPER.mapToCartItemDto(updatedCartItem);
-        return null;
+        CartItem existingCartItem = cartItemRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("CartItem with id " + id + " not found"));
+
+        if (!existingCartItem.getUserId().equals(userId)) {
+//            throw new AuthorizationException("You are not authorized to update this cart item");
+            System.out.println("You are not authorized to update this cart item");
+        }
+        existingCartItem.setSelectedWeight(cartItemDto.getSelectedWeight());
+        existingCartItem.setPiecesNumber(cartItemDto.getPiecesNumber());
+        existingCartItem.setTotalPrice(cartItemDto.getTotalPrice());
+        existingCartItem.setNote(cartItemDto.getNote());
+
+        // Čuvamo promene u bazi podataka
+        CartItem updatedCartItem = cartItemRepository.save(existingCartItem);
+
+        // Mapiramo ažurirani cart item u DTO format pre nego što ga vratimo
+        return CartItemMapper.MAPPER.mapToCartItemDto(updatedCartItem);
+    }
+
+    @Transactional
+    public CartItemDto increaseCartItemWeight(Long userId, Long cartItemId) {
+        CartItem existingCartItem = cartItemRepository.findById(cartItemId)
+                .orElseThrow(() -> new ResourceNotFoundException("CartItem with id " + cartItemId + " not found"));
+
+        if (!existingCartItem.getUserId().equals(userId)) {
+//            throw new AuthorizationException("You are not authorized to update this cart item");
+            System.out.println("You are not authorized to update this cart item");
+
+        }
+
+        if(existingCartItem.getSelectedWeight() <= existingCartItem.getCake().getMaxWeight()){
+            existingCartItem.setSelectedWeight(existingCartItem.getSelectedWeight() + 1);
+            existingCartItem.setPiecesNumber(existingCartItem.getPiecesNumber() + 8); //U jednom kg ima 8 parcica
+            existingCartItem.setTotalPrice(existingCartItem.getTotalPrice() + existingCartItem.getCake().getPricePerKilo());
+        }else {
+            System.out.println("Exceeded maximum weight of this cart item");
+        }
+        CartItem updatedCartItem = cartItemRepository.save(existingCartItem);
+
+        return CartItemMapper.MAPPER.mapToCartItemDto(updatedCartItem);
+    }
+
+    @Transactional
+    public CartItemDto decreaseCartItemWeight(Long userId, Long cartItemId) {
+        CartItem existingCartItem = cartItemRepository.findById(cartItemId)
+                .orElseThrow(() -> new ResourceNotFoundException("CartItem with id " + cartItemId + " not found"));
+
+        if (!existingCartItem.getUserId().equals(userId)) {
+//            throw new AuthorizationException("You are not authorized to update this cart item");
+            System.out.println("You are not authorized to update this cart item");
+
+        }
+
+        if(existingCartItem.getSelectedWeight() <= existingCartItem.getCake().getMaxWeight()){
+            existingCartItem.setSelectedWeight(existingCartItem.getSelectedWeight() - 1);
+            existingCartItem.setPiecesNumber(existingCartItem.getPiecesNumber() - 8); //U jednom kg ima 8 parcica
+            existingCartItem.setTotalPrice(existingCartItem.getTotalPrice() - existingCartItem.getCake().getPricePerKilo());
+        }else {
+            System.out.println("Selected weight is under minimum weight of this cart item");
+        }
+        CartItem updatedCartItem = cartItemRepository.save(existingCartItem);
+
+        return CartItemMapper.MAPPER.mapToCartItemDto(updatedCartItem);
     }
 
     @Override
