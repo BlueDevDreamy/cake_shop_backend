@@ -16,10 +16,11 @@ import java.util.Set;
 @AllArgsConstructor
 public class CartDto {
     private Long id;
-    private UserDto user;
-    private List<CartItem> cartItems;
+    private Long userId; // Referenca na User ID umesto celog objekta
+    private List<CartItemDto> cartItems;
     private Integer totalPrice;
     private int totalItem;
     private Integer totalDiscountedPrice;
     private Integer discount;
 }
+

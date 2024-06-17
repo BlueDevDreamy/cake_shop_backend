@@ -40,14 +40,12 @@ public class CartItem extends BaseEntity {
     @Column(name = "total_price", nullable = false)
     private int totalPrice;
 
-    @JsonIgnore
     @ManyToOne
+    @JoinColumn(name = "cake_id")
     private Cake cake;
 
-//    @OneToMany
-//    private List<Flavor> flavors;
-
     @OneToMany(mappedBy = "cartItem", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<CartItemFlavorTier> cartItemFlavorTiers;
 
     @Column(name = "note")
@@ -56,14 +54,9 @@ public class CartItem extends BaseEntity {
     @Column(name = "fake_tier")
     private int fakeTier;
 
-    //    @JsonIgnore
-////    @JsonManagedReference
-//    @ManyToOne
-////    @JoinColumn(name = "cart_id", nullable = false)
-
-//    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "cart_id", nullable = false)
+    @JsonIgnore
     private Cart cart;
 
     @Column(name = "user_id")

@@ -3,6 +3,8 @@ package com.andjela.diplomski.service;
 import com.andjela.diplomski.dto.cart.CartDto;
 import com.andjela.diplomski.dto.cart.CartMapper;
 import com.andjela.diplomski.dto.cartItem.CartItemCreateDto;
+import com.andjela.diplomski.dto.cartItem.CartItemDto;
+import com.andjela.diplomski.dto.cartItem.CartItemMapper;
 import com.andjela.diplomski.dto.user.UserDto;
 import com.andjela.diplomski.dto.user.UserMapper;
 import com.andjela.diplomski.entity.*;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -84,7 +87,6 @@ public class CartService implements ICartService {
         return cartItem;
     }
 
-    @Override
     public CartDto getUserCart(Long userId) {
         Cart cart = cartRepository.findUserById(userId);
         int totalPrice = 0;
@@ -93,6 +95,17 @@ public class CartService implements ICartService {
         }
         cart.setTotalPrice(totalPrice);
         cartRepository.save(cart);
-        return CartMapper.MAPPER.mapToCartDto(cart);
+
+        CartDto cartDto = CartMapper.MAPPER.mapToCartDto(cart);
+        List<CartItemDto> cartItemDtos = cart.getCartItems().stream()
+                .map(cartItem -> {
+                    CartItemDto cartItemDto = CartItemMapper.MAPPER.mapToCartItemDto(cartItem);
+                    cartItemDto.setFlavors(CartItemMapper.MAPPER.mapToCartItemFlavorTierDtoList(cartItem.getCartItemFlavorTiers()));
+                    return cartItemDto;
+                })
+                .collect(Collectors.toList());
+        cartDto.setCartItems(cartItemDtos);
+
+        return cartDto;
     }
 }
