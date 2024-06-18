@@ -12,6 +12,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 
+import java.util.List;
 import java.util.UUID;
 
 @SuperBuilder(toBuilder = true)
@@ -33,6 +34,14 @@ public class Address extends BaseEntity {
 
     @Column(name = "zip_code", nullable = false)
     private String zipCode;
+
+    @ToString.Exclude
+    @ManyToMany(mappedBy = "addresses")
+    private List<User> users;
+
+//    @ManyToOne
+//    @JoinColumn(name = "user_id")
+//    private User user;
 
 //    @JsonIgnore
 //    @ToString.Exclude

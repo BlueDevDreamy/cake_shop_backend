@@ -4,6 +4,7 @@ import com.andjela.diplomski.dto.cartItemFlavorTier.CartItemFlavorTierDto;
 import com.andjela.diplomski.dto.flavor.FlavorDto;
 import com.andjela.diplomski.entity.CartItem;
 import com.andjela.diplomski.entity.CartItemFlavorTier;
+import com.andjela.diplomski.entity.OrderItem;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;

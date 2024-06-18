@@ -43,7 +43,7 @@ public class Order extends BaseEntity {
     @Column(name = "delivery_date")
     private LocalDateTime deliveryDate;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
 //    @Column(name = "shipping_address")
     private Address shippingAddress;
 

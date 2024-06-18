@@ -114,11 +114,11 @@ public class PaymentController {
             if (payment.get("status").equals("captured")) {
                 System.out.println("payment details --- " + payment + payment.get("status"));
 
-                orderDto.getPaymentDetails().setPaymentId(paymentId);
-                orderDto.getPaymentDetails().setPaymentStatus("COMPLETED");
+//                orderDto.getPaymentDetails().setPaymentId(paymentId);
+//                orderDto.getPaymentDetails().setPaymentStatus("COMPLETED");
                 orderDto.setOrderStatus("PLACED");
 //			order.setOrderItems(order.getOrderItems());
-                System.out.println(orderDto.getPaymentDetails().getPaymentStatus() + "payment status ");
+//                System.out.println(orderDto.getPaymentDetails().getPaymentStatus() + "payment status ");
                 //orderRepository.save(order);
                 orderService.placeOrder(orderId);
             }

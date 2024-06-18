@@ -16,17 +16,18 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderDto {
 
+    private Long id;
 //    private String orderId;
     private UserDto user;
     private List<OrderItemDto> orderItems;
     private LocalDateTime orderDate;
     private LocalDateTime deliveryDate;
     private AddressDto shippingAddress;
-    private PaymentDetails paymentDetails; //mozda ne treba da bude vidljivo u dto
+//    private PaymentDetails paymentDetails; //mozda ne treba da bude vidljivo u dto
     private Integer totalPrice;
     private Integer totalDiscountedPrice;
     private Integer discount;
     private String orderStatus;
     private int totalItem;
-
 }
+
