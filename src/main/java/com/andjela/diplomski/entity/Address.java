@@ -35,12 +35,11 @@ public class Address extends BaseEntity {
     @Column(name = "zip_code", nullable = false)
     private String zipCode;
 
-    @ToString.Exclude
     @ManyToMany(mappedBy = "addresses")
     private List<User> users;
 
 //    @ManyToOne
-//    @JoinColumn(name = "user_id")
+//    @JoinColumn(name = "user_id56")
 //    private User user;
 
 //    @JsonIgnore

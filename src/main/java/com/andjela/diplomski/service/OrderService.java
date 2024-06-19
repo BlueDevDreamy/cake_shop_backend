@@ -48,53 +48,27 @@ public class OrderService implements IOrderService {
     private final AddressService addressService;
     private final CartItemRepository cartItemRepository;
     private final FlavorRepository flavorRepository;
-
-//    @Override
-//    @Transactional
-//    public OrderDto createOrder(OrderCreateDto orderCreateDto, String jwt) {
-//        // Dobavljanje korisnika na osnovu JWT tokena
-//        User user = userRepository.findById(orderCreateDto.getUserId())
-//                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-//
-//        // Mapiranje AddressCreateDto u Address entitet i sačuvanje adrese
-//        Address shippingAddress = AddressMapper.MAPPER.mapToAddress(orderCreateDto.getAddressDto());
-//        System.out.println(shippingAddress);
-//        shippingAddress.setCreatedAt(LocalDateTime.now());
-//        shippingAddress = addressRepository.save(shippingAddress);  // Sačuvaj adresu
-//
-//        // Mapiranje OrderCreateDto u Order entitet
-//        Order order = new Order();
-//        order.setUser(user);
-//        order.setShippingAddress(shippingAddress);  // Postavi sačuvanu adresu
-//        order.setOrderDate(orderCreateDto.getOrderDate());
-//        order.setDeliveryDate(orderCreateDto.getDeliveryDate());
-//        order.setTotalPrice(orderCreateDto.getTotalPrice());
-//        order.setOrderStatus(orderCreateDto.getOrderStatus());
-//        order.setTotalItem(orderCreateDto.getTotalItem());
-//        order.setCreatedAt(LocalDateTime.now());
-//
-//        // Dodajemo OrderItem entitete u narudžbu
-////        List<OrderItem> orderItems = mapToOrderItems(orderCreateDto.getOrderItems(), order);
-////        order.setOrderItems(orderItems);
-//
-//        // Sačuvaj narudžbu u bazi
-//        order = orderRepository.save(order);
-//
-//        // Mapiranje Order entitet u OrderDto
-//        return OrderMapper.MAPPER.mapToOrderDto(order);
-//    }
+    private final UserService userService;
 
     @Override
     @Transactional
     public OrderDto createOrder(OrderCreateDto orderCreateDto, String jwt) {
         // Dobavljanje korisnika na osnovu JWT tokena
-        User user = userRepository.findById(orderCreateDto.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        User user = userService.getUserByJwt(jwt);
+//        User user = userRepository.findByEmail(jwtTokenUtil.getUsernameFromToken(jwt))
+//                .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
         // Mapiranje AddressCreateDto u Address entitet i sačuvanje adrese
         Address shippingAddress = AddressMapper.MAPPER.mapToAddress(orderCreateDto.getAddressDto());
         shippingAddress.setCreatedAt(LocalDateTime.now());
         shippingAddress = addressRepository.save(shippingAddress);  // Sačuvaj adresu
+
+        // Dodavanje adrese korisniku
+        if (user.getAddresses() == null) {
+            user.setAddresses(new ArrayList<>());
+        }
+        user.getAddresses().add(shippingAddress);
+        user = userRepository.save(user); // Ažuriraj korisnika sa novom adresom
 
         // Mapiranje OrderCreateDto u Order entitet
         Order order = new Order();
@@ -151,164 +125,72 @@ public class OrderService implements IOrderService {
         return OrderMapper.MAPPER.mapToOrderDto(order);
     }
 
-
-    private List<OrderItemFlavorTier> mapToOrderItemFlavorTiers(List<CartItemFlavorTierDto> cartItemFlavorTierDtos) {
-        List<OrderItemFlavorTier> orderItemFlavorTiers = new ArrayList<>();
-        for (CartItemFlavorTierDto cartItemFlavorTierDto : cartItemFlavorTierDtos) {
-            OrderItemFlavorTier orderItemFlavorTier = new OrderItemFlavorTier();
-            orderItemFlavorTier.setFlavor(flavorRepository.findById(cartItemFlavorTierDto.getFlavorId())
-                    .orElseThrow(() -> new EntityNotFoundException("Flavor not found with id: " + cartItemFlavorTierDto.getFlavorId())));
-            orderItemFlavorTier.setTier(cartItemFlavorTierDto.getTier());
-            orderItemFlavorTiers.add(orderItemFlavorTier);
-        }
-        return orderItemFlavorTiers;
-    }
-
-
-
-
-
 //    @Override
 //    @Transactional
-//    public OrderDto createOrder(UserDto userDto, AddressDto addressDto) {
-//        Address address = AddressMapper.MAPPER.mapToAddress(addressDto);
-//        address.setCreatedAt(LocalDateTime.now());
-//        addressRepository.save(address);
-//
-////        User user = UserMapper.MAPPER.mapToUser(userDto);
-////        user.setAddresses(List.of(address));
-////        userRepository.save(user);
-//        User user = userRepository.findById(userDto.getId())
+//    public OrderDto createOrder(OrderCreateDto orderCreateDto, String jwt) {
+//        // Dobavljanje korisnika na osnovu JWT tokena
+//        User user = userRepository.findById(orderCreateDto.getUserId())
 //                .orElseThrow(() -> new EntityNotFoundException("User not found"));
 //
-//        // Dodajemo novu adresu u listu korisnikovih adresa
-//        if (user.getAddresses() == null) {
-//            user.setAddresses(new ArrayList<>());
-//        }
-//        user.getAddresses().add(address);
+//        // Mapiranje AddressCreateDto u Address entitet i sačuvanje adrese
+//        Address shippingAddress = AddressMapper.MAPPER.mapToAddress(orderCreateDto.getAddressDto());
+//        shippingAddress.setCreatedAt(LocalDateTime.now());
+//        shippingAddress = addressRepository.save(shippingAddress);  // Sačuvaj adresu
 //
-//        // Sačuvamo korisnika sa novom adresom
-//        userRepository.save(user);
+//        // Mapiranje OrderCreateDto u Order entitet
+//        Order order = new Order();
+//        order.setUser(user);
+//        order.setShippingAddress(shippingAddress);
+//        order.setOrderDate(orderCreateDto.getOrderDate());
+//        order.setDeliveryDate(orderCreateDto.getDeliveryDate());
+//        order.setTotalPrice(orderCreateDto.getTotalPrice());
+//        order.setOrderStatus(orderCreateDto.getOrderStatus());
+//        order.setTotalItem(orderCreateDto.getTotalItem());
+//        order.setCreatedAt(LocalDateTime.now());
 //
-//        Order order = Order.builder()
-//                .user(user)
-//                .shippingAddress(address)
-//                .orderDate(LocalDateTime.now())
-//                .orderStatus("Pending")
-//                .createdAt(LocalDateTime.now())
-//                .build();
-//
-//        orderRepository.save(order);
-//        OrderDto orderDto = OrderMapper.MAPPER.mapToOrderDto(order);
-//
-//        return orderDto;
-//    }
-
-//    @Override
-//    @Transactional
-//    public OrderDto createOrder(UserDto userDto, AddressCreateDto addressDto, List<CartItemDto> cartItems) {
-//        // Mapiramo AddressDto u Address entitet i sačuvamo ga
-//        Address address = AddressMapper.MAPPER.mapToAddress(addressDto);
-//        address.setCreatedAt(LocalDateTime.now());
-//        addressRepository.save(address);
-//
-//        // Dohvatamo korisnika iz baze podataka
-//        User user = userRepository.findById(userDto.getId())
-//                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-//
-//        // Dodajemo novu adresu u listu korisnikovih adresa
-//        if (user.getAddresses() == null) {
-//            user.setAddresses(new ArrayList<>());
-//        }
-//        user.getAddresses().add(address);
-//
-//        // Sačuvamo korisnika sa novom adresom
-//        userRepository.save(user);
-//
-//        // Kreiramo narudžbu
-//        Order order = Order.builder()
-//                .user(user)
-//                .shippingAddress(address)
-//                .orderDate(LocalDateTime.now())
-//                .orderStatus("Pending")
-//                .createdAt(LocalDateTime.now())
-//                .build();
-//
-//        // Dodajemo cartItems u orderItems
+//        // Dohvatanje CartItem-ova iz baze na osnovu ID-jeva navedenih u orderCreateDto
+//        List<Long> cartItemIds = orderCreateDto.getCartItems();
 //        List<OrderItem> orderItems = new ArrayList<>();
-//        int totalPrice = 0;
-//        int totalItems = 0;
 //
-//        for (CartItemDto cartItem : cartItems) {
-//            // Pretpostavljamo da imamo CartItemMapper za mapiranje CartItemDto u OrderItem
-//            OrderItem orderItem = CartItemMapper.MAPPER.mapToOrderItem(cartItem);
-//            orderItem.setOrder(order);
+//        for (Long cartItemId : cartItemIds) {
+//            CartItem cartItem = cartItemRepository.findById(cartItemId)
+//                    .orElseThrow(() -> new EntityNotFoundException("CartItem not found with id: " + cartItemId));
+//
+//            // Mapiranje CartItem u OrderItem
+//            OrderItem orderItem = new OrderItem();
+//            orderItem.setOrder(order); // Postavljanje veze ka narudžbi
+//            orderItem.setSelectedWeight(cartItem.getSelectedWeight());
+//            orderItem.setSelectedLayers(cartItem.getSelectedTiers()); // Podešavanje odabranih slojeva
+//            orderItem.setPiecesNumber(cartItem.getPiecesNumber());
+//            orderItem.setTotalPrice(cartItem.getTotalPrice());
+//            orderItem.setCake(cartItem.getCake()); // Postavljanje torte
+//
+//            // Mapiranje CartItemFlavorTier u OrderItemFlavorTier
+//            List<OrderItemFlavorTier> orderItemFlavorTiers = new ArrayList<>();
+//            for (CartItemFlavorTier cartItemFlavorTier : cartItem.getCartItemFlavorTiers()) {
+//                OrderItemFlavorTier orderItemFlavorTier = new OrderItemFlavorTier();
+//                orderItemFlavorTier.setOrderItem(orderItem);
+//                orderItemFlavorTier.setFlavor(cartItemFlavorTier.getFlavor());
+//                orderItemFlavorTier.setTier(cartItemFlavorTier.getTier());
+//                orderItemFlavorTier.setCreatedAt(LocalDateTime.now());
+//                orderItemFlavorTiers.add(orderItemFlavorTier);
+//            }
+//            orderItem.setCreatedAt(LocalDateTime.now());
+//            orderItem.setOrderItemFlavorTiers(orderItemFlavorTiers);
+//
+//            // Dodavanje orderItem u listu orderItems
 //            orderItems.add(orderItem);
-//
-//            // Dodajemo cenu i broj item-a za ukupnu cenu i broj item-a
-//            totalPrice = totalPrice + orderItem.getTotalPrice();
-//            totalItems += totalItems;
 //        }
-//        order.setTotalItem(totalItems);
+//
+//        // Postavljanje OrderItem-ova u Order
 //        order.setOrderItems(orderItems);
 //
-//        // Postavljamo deliveryDate + 5 dana od orderDate
-//        LocalDateTime deliveryDate = LocalDateTime.now().plusDays(5);
-//        order.setDeliveryDate(deliveryDate);
+//        // Sačuvaj narudžbu u bazi
+//        order = orderRepository.save(order);
 //
-//        // Postavljamo totalPrice i totalItem
-//        order.setTotalPrice(totalPrice);
-//        order.setTotalItem(totalItems);
-//
-//        // Sačuvamo narudžbu
-//        orderRepository.save(order);
-//
-//        // Mapiramo Order entitet u OrderDto
-//        OrderDto orderDto = OrderMapper.MAPPER.mapToOrderDto(order);
-//
-//        return orderDto;
+//        // Mapiranje Order entitet u OrderDto
+//        return OrderMapper.MAPPER.mapToOrderDto(order);
 //    }
-
-
-//    @Override
-//    @Transactional
-//    public OrderDto createOrder(UserDto userDto, AddressDto addressDto) {
-//        // Mapiramo AddressDto u Address entitet i sačuvamo ga
-//        Address address = AddressMapper.MAPPER.mapToAddress(addressDto);
-//        address.setCreatedAt(LocalDateTime.now());
-//        addressRepository.save(address);
-//
-//        // Dohvatamo korisnika iz baze podataka
-//        User user = userRepository.findById(userDto.getId())
-//                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-//
-//        // Dodajemo novu adresu u listu korisnikovih adresa
-//        if (user.getAddresses() == null) {
-//            user.setAddresses(new ArrayList<>());
-//        }
-//        user.getAddresses().add(address);
-//
-//        // Sačuvamo korisnika sa novom adresom
-//        userRepository.save(user);
-//
-//        // Kreiramo narudžbu
-//        Order order = Order.builder()
-//                .user(user)
-//                .shippingAddress(address)
-//                .orderDate(LocalDateTime.now())
-//                .orderStatus("Pending")
-//                .createdAt(LocalDateTime.now())
-//                .build();
-//
-//        // Sačuvamo narudžbu
-//        orderRepository.save(order);
-//
-//        // Mapiramo Order entitet u OrderDto
-//        OrderDto orderDto = OrderMapper.MAPPER.mapToOrderDto(order);
-//
-//        return orderDto;
-//    }
-
 
     @Override
     public OrderDto getOrderById(Long id) {

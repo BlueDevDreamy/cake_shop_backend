@@ -13,5 +13,5 @@ public class AddressDto {
     private String streetAddress;
     private String city;
     private String zipCode;
-//    private UserDto user;
+    private UserDto user;
 }
