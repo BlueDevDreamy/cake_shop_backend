@@ -22,13 +22,14 @@ public class PaypalController {
     private final PaypalService paypalService;
 
     @PostMapping("/create")
-    public ResponseEntity<Map<String, String>> createPayment(@RequestParam Double total,
+    public ResponseEntity<Map<String, String>> createPayment(@RequestParam Integer total,
                                                              @RequestParam String currency,
                                                              @RequestParam String description) {
         try {
+            log.info("Received payment request - Total: {}, Currency: {}, Description: {}", total, currency, description);
+
             String cancelUrl = "http://localhost:8080/api/payments/cancel";
             String successUrl = "http://localhost:8080/api/payments/success";
-
             Payment payment = paypalService.createPayment(
                     total,
                     currency,
