@@ -4,12 +4,14 @@ import com.andjela.diplomski.service.paypal.PaypalService;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,19 +54,44 @@ public class PaypalController {
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-
     @GetMapping("/success")
-    public ResponseEntity<String> paymentSuccess(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) {
+    public void paymentSuccess(
+            @RequestParam("paymentId") String paymentId,
+            @RequestParam("PayerID") String payerId,
+            HttpServletResponse response) {
         try {
             Payment payment = paypalService.exceutePayment(paymentId, payerId);
             if (payment.getState().equals("approved")) {
-                return new ResponseEntity<>("Payment Successful", HttpStatus.OK);
+                // Preusmeravanje na frontend sa odgovarajućim parametrima
+                response.sendRedirect("http://localhost:3000/payment-success?paymentId=" + paymentId + "&PayerID=" + payerId);
+            } else {
+                response.sendRedirect("http://localhost:3000/payment-failure");
             }
         } catch (PayPalRESTException e) {
             log.error(e.getMessage());
+            try {
+                response.sendRedirect("http://localhost:3000/payment-failure");
+            } catch (IOException ioException) {
+                log.error(ioException.getMessage());
+            }
+        } catch (IOException e) {
+            log.error(e.getMessage());
         }
-        return new ResponseEntity<>("Payment failed", HttpStatus.BAD_REQUEST);
     }
+
+
+//    @GetMapping("/success")
+//    public ResponseEntity<String> paymentSuccess(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) {
+//        try {
+//            Payment payment = paypalService.exceutePayment(paymentId, payerId);
+//            if (payment.getState().equals("approved")) {
+//                return new ResponseEntity<>("Payment Successful", HttpStatus.OK);
+//            }
+//        } catch (PayPalRESTException e) {
+//            log.error(e.getMessage());
+//        }
+//        return new ResponseEntity<>("Payment failed", HttpStatus.BAD_REQUEST);
+//    }
 
     @GetMapping("/cancel")
     public ResponseEntity<String> paymentCancel() {
