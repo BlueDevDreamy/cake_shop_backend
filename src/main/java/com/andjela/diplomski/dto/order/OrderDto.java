@@ -3,6 +3,7 @@ package com.andjela.diplomski.dto.order;
 import com.andjela.diplomski.dto.address.AddressDto;
 import com.andjela.diplomski.dto.orderItem.OrderItemDto;
 import com.andjela.diplomski.dto.user.UserDto;
+import com.andjela.diplomski.entity.OrderItem;
 import com.andjela.diplomski.entity.PaymentDetails;
 import lombok.AllArgsConstructor;
 import lombok.Data;

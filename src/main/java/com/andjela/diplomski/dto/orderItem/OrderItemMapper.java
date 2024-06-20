@@ -13,16 +13,12 @@ import org.mapstruct.factory.Mappers;
 public interface OrderItemMapper {
     OrderItemMapper MAPPER = Mappers.getMapper(OrderItemMapper.class);
 
+//    @Mapping(source = "cake.id", target = "cakeId")
+//    @Mapping(source = "cake.title", target = "cakeTitle")
+//    @Mapping(source = "cake.imageUrl", target = "cakeImageUrl")
+//    @Mapping(target = "flavors", source = "orderItemFlavorTiers")
     OrderItemDto mapToOrderItemDto(OrderItem orderItem);
-    OrderItem mapToOrderItem(OrderItemDto orderItemDto);
 
-    @Mapping(source = "orderItem.id", target = "orderItemId")
-    @Mapping(source = "flavor.id", target = "flavorId")
-    @Mapping(source = "flavor.name", target = "flavorName")
-    @Mapping(source = "flavor.description", target = "flavorDescription")
-    @Mapping(source = "flavor.ingredients", target = "flavorIngredients")
-    @Mapping(source = "flavor.allergens", target = "flavorAllergens")
-    @Mapping(source = "tier", target = "tier")
-    OrderItemFlavorTierDto mapToOrderItemFlavorTierDto(OrderItemFlavorTier orderItemFlavorTier);
+    OrderItem mapToOrderItem(OrderItemDto orderItemDto);
 
 }

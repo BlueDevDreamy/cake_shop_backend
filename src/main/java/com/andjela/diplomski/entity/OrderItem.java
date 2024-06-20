@@ -35,8 +35,8 @@ public class OrderItem extends BaseEntity {
     @Column(nullable = false, name = "selected_weight")
     private double selectedWeight;
 
-    @Column(nullable = false, name = "selected_layers")
-    private double selectedLayers;
+    @Column(nullable = false, name = "selected_tiers")
+    private double selectedTiers;
 
     @Column(name = "pieces_number")
     private int piecesNumber;
@@ -44,17 +44,19 @@ public class OrderItem extends BaseEntity {
     @Column(name = "total_price", nullable = false)
     private int totalPrice;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    //    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
+    @JoinColumn(name = "cake_id")
     private Cake cake;
 
 //    @OneToMany
 //    private List<Flavor> flavors;
 
-    @Column(name = "name")
+    @Column(name = "note")
     private String note;
 
-    @Column(name = "fake_layer")
-    private int fakeLayer;
+    @Column(name = "fake_tier")
+    private int fakeTier;
 
     @JsonIgnore
     @ManyToOne

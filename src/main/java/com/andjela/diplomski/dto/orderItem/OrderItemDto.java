@@ -17,30 +17,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderItemDto {
-//    private OrderDto order;
-//    private CakeDto cakeDto;
-//    private Integer price;
-//    private Integer discountedPrice;
-//    private LocalDateTime deliveryDate;
-//    private int quantity;
-//    private Long userId;
-
-//    private double selectedWeight;
-//    private int selectedTiers;
-//    private int piecesNumber;
-//    private int totalPrice;
-//    private Long cakeId;
-//    private List<Flavor> flavors;
-//    private String note;
-//    private int fakeTier;
-//    private Order order;
-//    private Long userId;
 
     private double selectedWeight;
     private int selectedTiers;
     private int piecesNumber;
     private int totalPrice;
-    private Long cakeId;
+    private CakeDto cake;
+//    private Long cakeId;
+//    private String cakeTitle;
+//    private String cakeImageUrl;
     private List<OrderItemFlavorTier> flavors;
     private String note;
     private int fakeTier;

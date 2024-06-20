@@ -93,9 +93,11 @@ public class OrderService implements IOrderService {
             OrderItem orderItem = new OrderItem();
             orderItem.setOrder(order); // Postavljanje veze ka narudžbi
             orderItem.setSelectedWeight(cartItem.getSelectedWeight());
-            orderItem.setSelectedLayers(cartItem.getSelectedTiers()); // Podešavanje odabranih slojeva
+            orderItem.setSelectedTiers(cartItem.getSelectedTiers()); // Podešavanje odabranih slojeva
             orderItem.setPiecesNumber(cartItem.getPiecesNumber());
             orderItem.setTotalPrice(cartItem.getTotalPrice());
+            orderItem.setCart(cartItem.getCart());
+            orderItem.setUserId(user.getId());
             orderItem.setCake(cartItem.getCake()); // Postavljanje torte
 
             // Mapiranje CartItemFlavorTier u OrderItemFlavorTier
@@ -192,10 +194,16 @@ public class OrderService implements IOrderService {
 //        return OrderMapper.MAPPER.mapToOrderDto(order);
 //    }
 
+    @Transactional
     @Override
     public OrderDto getOrderById(Long id) {
         Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Didn't find order with id:" + id));
-        System.out.println("U servisu" + id); // Dodajte ovu liniju za debug
+        for(OrderItem orderItem : order.getOrderItems()) {
+            System.out.println(orderItem.getCake().getTitle());
+            OrderItemDto orderItemDto = OrderItemMapper.MAPPER.mapToOrderItemDto(orderItem);
+//            System.out.println(orderItemDto.getCakeTitle());
+
+        }
         return OrderMapper.MAPPER.mapToOrderDto(order);
     }
 
