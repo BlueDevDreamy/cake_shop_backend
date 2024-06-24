@@ -1,5 +1,7 @@
 package com.andjela.diplomski.controller;
 
+import com.andjela.diplomski.entity.Order;
+import com.andjela.diplomski.repository.OrderRepository;
 import com.andjela.diplomski.service.paypal.PaypalService;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +25,8 @@ import java.util.Map;
 public class PaypalController {
 
     private final PaypalService paypalService;
+    private final OrderRepository orderRepository;
+
 
     @PostMapping("/create")
     public ResponseEntity<Map<String, String>> createPayment(@RequestParam Integer total,
@@ -62,7 +67,16 @@ public class PaypalController {
         try {
             Payment payment = paypalService.exceutePayment(paymentId, payerId);
             if (payment.getState().equals("approved")) {
-                // Preusmeravanje na frontend sa odgovarajućim parametrima
+                // Pretpostavljamo da imate način da dobijete Order iz paymentId-a
+                Order order = orderRepository.findByPaymentId(paymentId);
+                System.out.println(order);
+                if (order != null) {
+                    order.setPaid(true);
+                    order.setPaymentDate(LocalDateTime.now());
+                    order.setPaymentMethod("PayPal");
+                    order.setTransactionId(paymentId);
+                    orderRepository.save(order);
+                }
                 response.sendRedirect("http://localhost:3000/payment-success?paymentId=" + paymentId + "&PayerID=" + payerId);
             } else {
                 response.sendRedirect("http://localhost:3000/payment-failure");
@@ -78,6 +92,30 @@ public class PaypalController {
             log.error(e.getMessage());
         }
     }
+//    @GetMapping("/success")
+//    public void paymentSuccess(
+//            @RequestParam("paymentId") String paymentId,
+//            @RequestParam("PayerID") String payerId,
+//            HttpServletResponse response) {
+//        try {
+//            Payment payment = paypalService.exceutePayment(paymentId, payerId);
+//            if (payment.getState().equals("approved")) {
+//                // Preusmeravanje na frontend sa odgovarajućim parametrima
+//                response.sendRedirect("http://localhost:3000/payment-success?paymentId=" + paymentId + "&PayerID=" + payerId);
+//            } else {
+//                response.sendRedirect("http://localhost:3000/payment-failure");
+//            }
+//        } catch (PayPalRESTException e) {
+//            log.error(e.getMessage());
+//            try {
+//                response.sendRedirect("http://localhost:3000/payment-failure");
+//            } catch (IOException ioException) {
+//                log.error(ioException.getMessage());
+//            }
+//        } catch (IOException e) {
+//            log.error(e.getMessage());
+//        }
+//    }
 
 
 //    @GetMapping("/success")

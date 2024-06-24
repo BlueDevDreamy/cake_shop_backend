@@ -55,10 +55,10 @@ public class User extends BaseEntity {
     )
     private List<Address> addresses;
 
-    @Embedded
-    @ElementCollection
-    @CollectionTable(name = "payment_information", joinColumns = @JoinColumn(name = "user_id"))
-    private List<PaymentInformation> paymentInformation;
+//    @Embedded
+//    @ElementCollection
+//    @CollectionTable(name = "payment_information", joinColumns = @JoinColumn(name = "user_id"))
+//    private List<PaymentInformation> paymentInformation;
 
 
     @EqualsAndHashCode.Exclude

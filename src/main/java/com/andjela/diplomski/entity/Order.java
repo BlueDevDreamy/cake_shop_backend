@@ -6,13 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.UuidGenerator;
-import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @SuperBuilder(toBuilder = true)
 @Data
@@ -44,11 +40,7 @@ public class Order extends BaseEntity {
     private LocalDateTime deliveryDate;
 
     @OneToOne(cascade = CascadeType.ALL)
-//    @Column(name = "shipping_address")
     private Address shippingAddress;
-
-    @Embedded
-    private PaymentDetails paymentDetails;
 
     @Column(name = "total_price")
     private int totalPrice;
@@ -56,4 +48,18 @@ public class Order extends BaseEntity {
     @Column(name = "total_item")
     private int totalItem;
 
+    @Column(name = "payment_id")
+    private String paymentId;
+
+    @Column(name = "is_paid", nullable = false)
+    private boolean isPaid = false;
+
+    @Column(name = "payment_date")
+    private LocalDateTime paymentDate;
+
+    @Column(name = "payment_method")
+    private String paymentMethod;
+
+    @Column(name = "transaction_id")
+    private String transactionId;
 }

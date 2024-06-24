@@ -68,4 +68,5 @@ public class RefreshJwtToken extends BaseEntity {
         this.token = token;
         this.expiryDate = calculateExpiryDate(EXPIRATION);
     }
+
 }
