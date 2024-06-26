@@ -169,6 +169,20 @@ public class OrderService implements IOrderService {
         return "Order deleted successfully";
     }
 
+    @Transactional
+    public void updateOrderAfterPayment(String paymentId, boolean isPaid, LocalDateTime paymentDate, String paymentMethod, String transactionId) {
+        Order order = orderRepository.findByPaymentId(paymentId);
+        if (order != null) {
+            order.setPaid(isPaid);
+            order.setPaymentDate(paymentDate);
+            order.setPaymentMethod(paymentMethod);
+            order.setTransactionId(transactionId);
+            orderRepository.save(order);
+        } else {
+            throw new EntityNotFoundException("Order not found with paymentId: " + paymentId);
+        }
+    }
+
     private String generateOrderNumber() {
         LocalDate currentDate = LocalDate.now();
         String formattedDate = currentDate.toString().replace("-", "");

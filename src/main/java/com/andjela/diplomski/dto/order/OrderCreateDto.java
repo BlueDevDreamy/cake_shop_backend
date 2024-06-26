@@ -23,4 +23,10 @@ public class OrderCreateDto {
     private Integer discount;
     private String orderStatus;
     private int totalItem;
+    private String orderNumber;
+    private String paymentId;
+    private boolean isPaid;
+    private LocalDateTime paymentDate;
+    private String paymentMethod;
+    private String transactionId;
 }

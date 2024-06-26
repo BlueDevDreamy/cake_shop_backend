@@ -27,5 +27,10 @@ public class OrderDto {
     private Integer discount;
     private String orderStatus;
     private int totalItem;
+    private String paymentId;
+    private boolean isPaid;
+    private LocalDateTime paymentDate;
+    private String paymentMethod;
+    private String transactionId;
 }
 
