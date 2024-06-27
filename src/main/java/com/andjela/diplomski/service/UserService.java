@@ -21,6 +21,7 @@ import com.andjela.diplomski.security.JwtTokenProvider;
 import com.andjela.diplomski.service.auth.RegistrationTokenService;
 import com.andjela.diplomski.utils.AuthHelper;
 import com.andjela.diplomski.utils.RequestHelper;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -100,13 +101,26 @@ public class UserService implements IUserService {
         }
     }
 
+//    @Override
+//    public User getUserByJwt(String jwt) throws ResourceNotFoundException {
+//        String email = jwtTokenProvider.getEmailFromJwtToken(jwt);
+//        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User with email " + email + " could not be found"));
+//        if (user == null) {
+//            throw new UserException("user not exist with email " + email);
+//        }
+//        return user;
+//    }
+
     @Override
     public User getUserByJwt(String jwt) throws ResourceNotFoundException {
-        String email = jwtTokenProvider.getEmailFromJwtToken(jwt);
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User with email " + email + " could not be found"));
-        if (user == null) {
-            throw new UserException("user not exist with email " + email);
+        try {
+            String email = jwtTokenProvider.getEmailFromJwtToken(jwt);
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new ResourceNotFoundException("User with email " + email + " could not be found"));
+            return user;
+        } catch (ExpiredJwtException ex) {
+            // Handle expired JWT token
+            throw new UserException("JWT token has expired. Please log in again.");
         }
-        return user;
     }
 }
