@@ -30,12 +30,82 @@ public class OrderService implements IOrderService {
     private final CartItemRepository cartItemRepository;
     private final UserService userService;
 
-    @Override
-    @Transactional
-    public OrderDto createOrder(OrderCreateDto orderCreateDto, String jwt) {
-        User user = userService.getUserByJwt(jwt);
+//    @Override
+//    @Transactional
+//    public OrderDto createOrder(OrderCreateDto orderCreateDto, String jwt) {
+//        User user = userService.getUserByJwt(jwt);
+//
+//        Address shippingAddress = AddressMapper.MAPPER.mapToAddress(orderCreateDto.getAddressDto());
+//        shippingAddress.setCreatedAt(LocalDateTime.now());
+//        shippingAddress = addressRepository.save(shippingAddress);
+//
+//        if (user.getAddresses() == null) {
+//            user.setAddresses(new ArrayList<>());
+//        }
+//        user.getAddresses().add(shippingAddress);
+//        user = userRepository.save(user);
+//
+//        Order order = new Order();
+//        order.setUser(user);
+//        order.setShippingAddress(shippingAddress);
+//        order.setOrderDate(orderCreateDto.getOrderDate());
+//        order.setDeliveryDate(orderCreateDto.getDeliveryDate());
+//        order.setTotalPrice(orderCreateDto.getTotalPrice());
+//        order.setOrderStatus(orderCreateDto.getOrderStatus());
+//        order.setTotalItem(orderCreateDto.getTotalItem());
+//        order.setOrderNumber(generateOrderNumber());
+//        order.setCreatedAt(LocalDateTime.now());
+//
+//        List<Long> cartItemIds = orderCreateDto.getCartItems();
+//        List<OrderItem> orderItems = new ArrayList<>();
+//
+//        for (Long cartItemId : cartItemIds) {
+//            CartItem cartItem = cartItemRepository.findById(cartItemId)
+//                    .orElseThrow(() -> new EntityNotFoundException("CartItem not found with id: " + cartItemId));
+//
+//            OrderItem orderItem = new OrderItem();
+//            orderItem.setOrder(order);
+//            orderItem.setSelectedWeight(cartItem.getSelectedWeight());
+//            orderItem.setSelectedTiers(cartItem.getSelectedTiers());
+//            orderItem.setPiecesNumber(cartItem.getPiecesNumber());
+//            orderItem.setTotalPrice(cartItem.getTotalPrice());
+//            orderItem.setCart(cartItem.getCart());
+//            orderItem.setUserId(user.getId());
+//            orderItem.setCake(cartItem.getCake());
+//
+//            List<OrderItemFlavorTier> orderItemFlavorTiers = new ArrayList<>();
+//            for (CartItemFlavorTier cartItemFlavorTier : cartItem.getCartItemFlavorTiers()) {
+//                OrderItemFlavorTier orderItemFlavorTier = new OrderItemFlavorTier();
+//                orderItemFlavorTier.setOrderItem(orderItem);
+//                orderItemFlavorTier.setFlavor(cartItemFlavorTier.getFlavor());
+//                orderItemFlavorTier.setTier(cartItemFlavorTier.getTier());
+//                orderItemFlavorTier.setCreatedAt(LocalDateTime.now());
+//                orderItemFlavorTiers.add(orderItemFlavorTier);
+//            }
+//            orderItem.setCreatedAt(LocalDateTime.now());
+//            orderItem.setOrderItemFlavorTiers(orderItemFlavorTiers);
+//
+//            orderItems.add(orderItem);
+//        }
+//
+//        order.setOrderItems(orderItems);
+//
+//        order = orderRepository.save(order);
+//
+//        return OrderMapper.MAPPER.mapToOrderDto(order);
+//    }
+@Override
+@Transactional
+public OrderDto createOrder(OrderCreateDto orderCreateDto, String jwt) {
+    User user = userService.getUserByJwt(jwt);
+    Address shippingAddress;
 
-        Address shippingAddress = AddressMapper.MAPPER.mapToAddress(orderCreateDto.getAddressDto());
+    if (orderCreateDto.getAddressDto().getId() != null) {
+        System.out.println("Ovde ide u if " + orderCreateDto.getAddressDto().getId());
+        shippingAddress = addressRepository.findById(orderCreateDto.getAddressDto().getId())
+                .orElseThrow(() -> new EntityNotFoundException("Address not found with id: " + orderCreateDto.getAddressDto().getId()));
+    } else {
+        shippingAddress = AddressMapper.MAPPER.mapToAddress(orderCreateDto.getAddressDto());
         shippingAddress.setCreatedAt(LocalDateTime.now());
         shippingAddress = addressRepository.save(shippingAddress);
 
@@ -44,56 +114,58 @@ public class OrderService implements IOrderService {
         }
         user.getAddresses().add(shippingAddress);
         user = userRepository.save(user);
-
-        Order order = new Order();
-        order.setUser(user);
-        order.setShippingAddress(shippingAddress);
-        order.setOrderDate(orderCreateDto.getOrderDate());
-        order.setDeliveryDate(orderCreateDto.getDeliveryDate());
-        order.setTotalPrice(orderCreateDto.getTotalPrice());
-        order.setOrderStatus(orderCreateDto.getOrderStatus());
-        order.setTotalItem(orderCreateDto.getTotalItem());
-        order.setOrderNumber(generateOrderNumber());
-        order.setCreatedAt(LocalDateTime.now());
-
-        List<Long> cartItemIds = orderCreateDto.getCartItems();
-        List<OrderItem> orderItems = new ArrayList<>();
-
-        for (Long cartItemId : cartItemIds) {
-            CartItem cartItem = cartItemRepository.findById(cartItemId)
-                    .orElseThrow(() -> new EntityNotFoundException("CartItem not found with id: " + cartItemId));
-
-            OrderItem orderItem = new OrderItem();
-            orderItem.setOrder(order);
-            orderItem.setSelectedWeight(cartItem.getSelectedWeight());
-            orderItem.setSelectedTiers(cartItem.getSelectedTiers());
-            orderItem.setPiecesNumber(cartItem.getPiecesNumber());
-            orderItem.setTotalPrice(cartItem.getTotalPrice());
-            orderItem.setCart(cartItem.getCart());
-            orderItem.setUserId(user.getId());
-            orderItem.setCake(cartItem.getCake());
-
-            List<OrderItemFlavorTier> orderItemFlavorTiers = new ArrayList<>();
-            for (CartItemFlavorTier cartItemFlavorTier : cartItem.getCartItemFlavorTiers()) {
-                OrderItemFlavorTier orderItemFlavorTier = new OrderItemFlavorTier();
-                orderItemFlavorTier.setOrderItem(orderItem);
-                orderItemFlavorTier.setFlavor(cartItemFlavorTier.getFlavor());
-                orderItemFlavorTier.setTier(cartItemFlavorTier.getTier());
-                orderItemFlavorTier.setCreatedAt(LocalDateTime.now());
-                orderItemFlavorTiers.add(orderItemFlavorTier);
-            }
-            orderItem.setCreatedAt(LocalDateTime.now());
-            orderItem.setOrderItemFlavorTiers(orderItemFlavorTiers);
-
-            orderItems.add(orderItem);
-        }
-
-        order.setOrderItems(orderItems);
-
-        order = orderRepository.save(order);
-
-        return OrderMapper.MAPPER.mapToOrderDto(order);
     }
+    Order order = new Order();
+    order.setUser(user);
+    order.setShippingAddress(shippingAddress);
+    order.setOrderDate(orderCreateDto.getOrderDate());
+    order.setDeliveryDate(orderCreateDto.getDeliveryDate());
+    order.setTotalPrice(orderCreateDto.getTotalPrice());
+    order.setOrderStatus(orderCreateDto.getOrderStatus());
+    order.setTotalItem(orderCreateDto.getTotalItem());
+    order.setOrderNumber(generateOrderNumber());
+    order.setCreatedAt(LocalDateTime.now());
+
+    List<Long> cartItemIds = orderCreateDto.getCartItems();
+    List<OrderItem> orderItems = new ArrayList<>();
+
+    for (Long cartItemId : cartItemIds) {
+        CartItem cartItem = cartItemRepository.findById(cartItemId)
+                .orElseThrow(() -> new EntityNotFoundException("CartItem not found with id: " + cartItemId));
+
+        OrderItem orderItem = new OrderItem();
+        orderItem.setOrder(order);
+        orderItem.setSelectedWeight(cartItem.getSelectedWeight());
+        orderItem.setSelectedTiers(cartItem.getSelectedTiers());
+        orderItem.setPiecesNumber(cartItem.getPiecesNumber());
+        orderItem.setTotalPrice(cartItem.getTotalPrice());
+        orderItem.setCart(cartItem.getCart());
+        orderItem.setUserId(user.getId());
+        orderItem.setCake(cartItem.getCake());
+
+        List<OrderItemFlavorTier> orderItemFlavorTiers = new ArrayList<>();
+        for (CartItemFlavorTier cartItemFlavorTier : cartItem.getCartItemFlavorTiers()) {
+            OrderItemFlavorTier orderItemFlavorTier = new OrderItemFlavorTier();
+            orderItemFlavorTier.setOrderItem(orderItem);
+            orderItemFlavorTier.setFlavor(cartItemFlavorTier.getFlavor());
+            orderItemFlavorTier.setTier(cartItemFlavorTier.getTier());
+            orderItemFlavorTier.setCreatedAt(LocalDateTime.now());
+            orderItemFlavorTiers.add(orderItemFlavorTier);
+        }
+        orderItem.setCreatedAt(LocalDateTime.now());
+        orderItem.setOrderItemFlavorTiers(orderItemFlavorTiers);
+
+        orderItems.add(orderItem);
+    }
+
+    order.setOrderItems(orderItems);
+
+    order = orderRepository.save(order);
+
+    return OrderMapper.MAPPER.mapToOrderDto(order);
+}
+
+
 
     @Transactional
     @Override

@@ -73,7 +73,6 @@ public class OrderController {
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderDto> getOrderById(@PathVariable Long orderId, @RequestHeader("Authorization") String jwt){
         User user = userService.getUserByJwt(jwt);
-        System.out.println("U kontroleru" + orderId); // Dodajte ovu liniju za debug
         OrderDto orders = orderService.getOrderById(orderId);
         return new ResponseEntity<>(orders, HttpStatus.ACCEPTED);
     }

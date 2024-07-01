@@ -64,6 +64,16 @@ public class CartService implements ICartService {
         CartItem cartItem = createCartItem(userId, req, cake, cart, cartItemFlavorTiers);
         cartItemRepository.save(cartItem);
 
+        int totalPrice = 0;
+        int totalItems = 0;
+        for (CartItem c : cart.getCartItems()) {
+            totalPrice += c.getTotalPrice();
+            totalItems++;
+        }
+        cart.setTotalPrice(totalPrice);
+        cart.setTotalItem(totalItems);
+        cartRepository.save(cart);
+
         return "Item added to cart";
     }
 
@@ -89,11 +99,17 @@ public class CartService implements ICartService {
 
     public CartDto getUserCart(Long userId) {
         Cart cart = cartRepository.findUserById(userId);
+
         int totalPrice = 0;
+        int totalItems = 0;
         for (CartItem cartItem : cart.getCartItems()) {
             totalPrice += cartItem.getTotalPrice();
+            totalItems++;
+
         }
         cart.setTotalPrice(totalPrice);
+        cart.setTotalItem(totalItems);
+
         cartRepository.save(cart);
 
         CartDto cartDto = CartMapper.MAPPER.mapToCartDto(cart);
