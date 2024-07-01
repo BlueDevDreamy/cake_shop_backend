@@ -12,7 +12,7 @@ public interface UserMapper {
     @Mapping(target = "address", source = "addresses")
     UserDto mapToUserDTO(User user);
 
-    @Mapping(target = "address", source = "addresses")
+    @Mapping(target = "addresses", source = "address")
     User mapToUser(UserDto userDTO);
 
 }

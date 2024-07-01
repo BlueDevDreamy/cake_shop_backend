@@ -6,20 +6,24 @@ import com.andjela.diplomski.dto.cart.CartDto;
 import com.andjela.diplomski.dto.cart.CartMapper;
 import com.andjela.diplomski.dto.cartItem.CartItemDto;
 import com.andjela.diplomski.dto.cartItem.CartItemMapper;
+import com.andjela.diplomski.dto.order.OrderDto;
 import com.andjela.diplomski.dto.user.UserDto;
 import com.andjela.diplomski.entity.Cake;
 import com.andjela.diplomski.entity.Cart;
 import com.andjela.diplomski.entity.CartItem;
+import com.andjela.diplomski.entity.Order;
 import com.andjela.diplomski.exception.ResourceNotFoundException;
 import com.andjela.diplomski.repository.CakeRepository;
 import com.andjela.diplomski.repository.CartItemRepository;
 import com.andjela.diplomski.repository.CartRepository;
+import com.andjela.diplomski.repository.OrderRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -30,6 +34,8 @@ public class CartItemService implements ICartItemService {
     private final UserService userService;
     private final CartRepository cartRepository;
     private final CakeRepository cakeRepository;
+    private final OrderService orderService;
+    private final OrderRepository orderRepository;
 
     @Override
     public CartItemDto createCartItem(CartItemDto cartItemDto) {
@@ -136,6 +142,13 @@ public class CartItemService implements ICartItemService {
         return CartItemMapper.MAPPER.mapToCartItemDto(cartItem);
     }
 
+
+    @Override
+    public CartItemDto findCartItemById(Long id) {
+        CartItem cartItem = cartItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Didn't find cart item with id: " + id));
+        return CartItemMapper.MAPPER.mapToCartItemDto(cartItem);
+
+    }
     @Override
     public String removeCartItem(Long userId, Long cartItemId) {
         CartItemDto cartItemDto = findCartItemById(cartItemId);
@@ -151,11 +164,19 @@ public class CartItemService implements ICartItemService {
         }
         return "Successfully deleted cart item";
     }
-
-    @Override
-    public CartItemDto findCartItemById(Long id) {
-        CartItem cartItem = cartItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Didn't find cart item with id: " + id));
-        return CartItemMapper.MAPPER.mapToCartItemDto(cartItem);
-
+@Transactional
+    public String removeAllCartItemsByPayerId(String payerId) {
+        Order order = orderRepository.findByPaymentId(payerId);
+        if (order == null) {
+            throw new ResourceNotFoundException("No order found for payer id: " + payerId);
+        }
+        Long userId = order.getUser().getId();
+        List<CartItem> cartItems = cartItemRepository.findAllByUserId(userId);
+        if (cartItems.isEmpty()) {
+            throw new ResourceNotFoundException("No items found in the cart for user id: " + userId);
+        }
+        cartItemRepository.deleteAllByUserId(userId);
+        return "Successfully deleted all cart items for user with payer id: " + payerId;
     }
+
 }

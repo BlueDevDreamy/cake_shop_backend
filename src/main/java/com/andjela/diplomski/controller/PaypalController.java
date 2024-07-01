@@ -2,6 +2,7 @@ package com.andjela.diplomski.controller;
 
 import com.andjela.diplomski.entity.Order;
 import com.andjela.diplomski.repository.OrderRepository;
+import com.andjela.diplomski.service.CartItemService;
 import com.andjela.diplomski.service.OrderService;
 import com.andjela.diplomski.service.paypal.PaypalService;
 import com.paypal.api.payments.Links;
@@ -31,6 +32,7 @@ public class PaypalController {
     private final PaypalService paypalService;
     private final OrderService orderService;
     private final OrderRepository orderRepository;
+    private final CartItemService cartItemService;
 
     @PostMapping("/create")
     public ResponseEntity<Map<String, String>> createPayment(@RequestParam Integer total,
@@ -163,8 +165,8 @@ public class PaypalController {
             Payment payment = paypalService.executePayment(paymentId, payerId);
             if (payment.getState().equals("approved")) {
                 orderService.updateOrderAfterPayment(paymentId, true, LocalDateTime.now(), "PayPal", paymentId);
+                cartItemService.removeAllCartItemsByPayerId(paymentId);
                 response.sendRedirect("http://localhost:3000/payments/success?paymentId=" + paymentId + "&PayerID=" + payerId);
-                System.out.println("Ovde prodje placanje");
             } else {
                 response.sendRedirect("http://localhost:3000/payment-failure");
             }
