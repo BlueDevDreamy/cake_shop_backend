@@ -12,10 +12,7 @@ import com.andjela.diplomski.repository.CakeRepository;
 import com.andjela.diplomski.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -113,19 +110,33 @@ public class CakeService implements ICakeService {
         return CakeMapper.MAPPER.mapToListCakeDto(cakes);
     }
 
-    @Override
-    public Page<Cake> getAllCakesPageable(String category, int minWeight, int maxWeight, int minTier, int maxTier, String sort, Integer pageNumber, Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+//    @Override
+//    public Page<Cake> getAllCakesPageable(String category, int minWeight, int maxWeight, int minTier, int maxTier, String sort, Integer pageNumber, Integer pageSize) {
+//        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+//
+//        List<Cake> cakes = cakeRepository.filterCakes(category, minWeight, maxWeight, minTier, maxTier, sort);
+//
+//        int startIndex = (int) pageable.getOffset();
+//        int endIndex = Math.min(startIndex + pageable.getPageSize(), cakes.size());
+//
+//        List<Cake> pageContent = cakes.subList(startIndex, endIndex);
+//        Page<Cake> filteredCakes = new PageImpl<>(pageContent, pageable, cakes.size());
+//        return filteredCakes;
+//    }
+@Override
+public Page<Cake> getAllCakesPageable(String category, int minWeight, int maxWeight, int minTier, int maxTier, String sort, Integer pageNumber, Integer pageSize) {
+    Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sort));
 
-        List<Cake> cakes = cakeRepository.filterCakes(category, minWeight, maxWeight, minTier, maxTier, sort);
+    List<Cake> cakes = cakeRepository.filterCakes(category, minWeight, maxWeight, minTier, maxTier, sort);
 
-        int startIndex = (int) pageable.getOffset();
-        int endIndex = Math.min(startIndex + pageable.getPageSize(), cakes.size());
+    int startIndex = (int) pageable.getOffset();
+    int endIndex = Math.min(startIndex + pageable.getPageSize(), cakes.size());
 
-        List<Cake> pageContent = cakes.subList(startIndex, endIndex);
-        Page<Cake> filteredCakes = new PageImpl<>(pageContent, pageable, cakes.size());
-        return filteredCakes;
-    }
+    List<Cake> pageContent = cakes.subList(startIndex, endIndex);
+    Page<Cake> filteredCakes = new PageImpl<>(pageContent, pageable, cakes.size());
+    return filteredCakes;
+}
+
     @Override
     public List<CakeDto> getAllCakes() {
         List<Cake> cakes = cakeRepository.findAll();
