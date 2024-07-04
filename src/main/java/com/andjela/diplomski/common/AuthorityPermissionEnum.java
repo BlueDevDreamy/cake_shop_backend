@@ -1,7 +1,7 @@
 package com.andjela.diplomski.common;
 
 public enum AuthorityPermissionEnum {
-    SUPERADMIN,
+    ADMIN,
 
     EMPLOYEE,
 

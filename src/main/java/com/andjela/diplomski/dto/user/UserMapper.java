@@ -10,9 +10,11 @@ public interface UserMapper {
     UserMapper MAPPER = Mappers.getMapper(UserMapper.class);
 
     @Mapping(target = "address", source = "addresses")
+    @Mapping(target = "roles", source = "authorities")
     UserDto mapToUserDTO(User user);
 
     @Mapping(target = "addresses", source = "address")
+    @Mapping(target = "authorities", source = "roles")
     User mapToUser(UserDto userDTO);
 
 }

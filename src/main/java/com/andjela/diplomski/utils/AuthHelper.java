@@ -12,7 +12,7 @@ import java.util.Collection;
 public class AuthHelper {
 
     public static boolean currentUserIsSuperAdmin() {
-        return currentUserHasAuthority(AuthorityPermissionEnum.SUPERADMIN);
+        return currentUserHasAuthority(AuthorityPermissionEnum.ADMIN);
     }
 
     public static boolean currentUserHasAuthority(AuthorityPermissionEnum authority) {

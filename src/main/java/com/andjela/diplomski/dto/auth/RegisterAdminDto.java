@@ -38,6 +38,6 @@ public class RegisterAdminDto implements UserData {
     }
     @Override
     public List<String> getAuthorities() {
-        return List.of(AuthorityPermissionEnum.SUPERADMIN.name());
+        return List.of(AuthorityPermissionEnum.ADMIN.name());
     }
 }

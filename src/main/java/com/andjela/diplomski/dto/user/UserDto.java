@@ -2,6 +2,7 @@ package com.andjela.diplomski.dto.user;
 
 import com.andjela.diplomski.dto.address.AddressDto;
 import com.andjela.diplomski.entity.Address;
+import com.andjela.diplomski.entity.Authority;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ public class UserDto {
     private String lastName;
     private String phoneNumber;
     private List<AddressDto> address;
+    private List<Authority> roles;
 
 //    private List<AddressDto> address;
 }
