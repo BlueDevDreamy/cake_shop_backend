@@ -10,6 +10,7 @@ import com.andjela.diplomski.exception.DataNotValidException;
 import com.andjela.diplomski.exception.ResourceNotFoundException;
 import com.andjela.diplomski.repository.CakeRepository;
 import com.andjela.diplomski.repository.CategoryRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
@@ -67,7 +68,7 @@ public class CakeService implements ICakeService {
         }
         return foundCakes;
     }
-
+@Transactional
     @Override
     public CakeDto updateCake(Long id, CakeUpdateDto cakeUpdateDto) {
         Cake foundCake = cakeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Entity whit id " + id + " could not be updated"));

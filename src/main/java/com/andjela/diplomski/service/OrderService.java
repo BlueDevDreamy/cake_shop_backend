@@ -182,41 +182,61 @@ public OrderDto createOrder(OrderCreateDto orderCreateDto, String jwt) {
 
     @Override
     public OrderDto placeOrder(Long id) {
-        OrderDto orderDto = getOrderById(id);
-        orderDto.setOrderStatus("PLACED");
-        orderRepository.save(OrderMapper.MAPPER.mapToOrder(orderDto));
+    Order order = orderRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Didn't find order with id:" + id));
+    order.setOrderStatus("PLACED");
+    orderRepository.save(order);
+    OrderDto orderDto = OrderMapper.MAPPER.mapToOrderDto(order);
+//        OrderDto orderDto = getOrderById(id);
+//        orderDto.setOrderStatus("PLACED");
+//        orderRepository.save(OrderMapper.MAPPER.mapToOrder(orderDto));
         return orderDto;
     }
 
     @Override
     public OrderDto confirmedOrder(Long id) {
-        OrderDto orderDto = getOrderById(id);
-        orderDto.setOrderStatus("CONFIRMED");
-        orderRepository.save(OrderMapper.MAPPER.mapToOrder(orderDto));
+//        OrderDto orderDto = getOrderById(id);
+//        orderDto.setOrderStatus("CONFIRMED");
+//        orderRepository.save(OrderMapper.MAPPER.mapToOrder(orderDto));
+        Order order = orderRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Didn't find order with id:" + id));
+        order.setOrderStatus("CONFIRMED");
+        orderRepository.save(order);
+        OrderDto orderDto = OrderMapper.MAPPER.mapToOrderDto(order);
         return orderDto;
     }
 
     @Override
     public OrderDto shippedOrder(Long id) {
-        OrderDto orderDto = getOrderById(id);
-        orderDto.setOrderStatus("SHIPPED");
-        orderRepository.save(OrderMapper.MAPPER.mapToOrder(orderDto));
+//        OrderDto orderDto = getOrderById(id);
+//        orderDto.setOrderStatus("SHIPPED");
+//        orderRepository.save(OrderMapper.MAPPER.mapToOrder(orderDto));
+        Order order = orderRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Didn't find order with id:" + id));
+        order.setOrderStatus("SHIPPED");
+        orderRepository.save(order);
+        OrderDto orderDto = OrderMapper.MAPPER.mapToOrderDto(order);
         return orderDto;
     }
 
     @Override
     public OrderDto deliveredOrder(Long id) {
-        OrderDto orderDto = getOrderById(id);
-        orderDto.setOrderStatus("DELIVERED");
-        orderRepository.save(OrderMapper.MAPPER.mapToOrder(orderDto));
+//        OrderDto orderDto = getOrderById(id);
+//        orderDto.setOrderStatus("DELIVERED");
+//        orderRepository.save(OrderMapper.MAPPER.mapToOrder(orderDto));
+        Order order = orderRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Didn't find order with id:" + id));
+        order.setOrderStatus("DELIVERED");
+        orderRepository.save(order);
+        OrderDto orderDto = OrderMapper.MAPPER.mapToOrderDto(order);
         return orderDto;
     }
 
     @Override
     public OrderDto canceledOrder(Long id) {
-        OrderDto orderDto = getOrderById(id);
-        orderDto.setOrderStatus("CANCELED");
-        orderRepository.save(OrderMapper.MAPPER.mapToOrder(orderDto));
+//        OrderDto orderDto = getOrderById(id);
+//        orderDto.setOrderStatus("CANCELED");
+//        orderRepository.save(OrderMapper.MAPPER.mapToOrder(orderDto));
+        Order order = orderRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Didn't find order with id:" + id));
+        order.setOrderStatus("CANCELED");
+        orderRepository.save(order);
+        OrderDto orderDto = OrderMapper.MAPPER.mapToOrderDto(order);
         return orderDto;
     }
 

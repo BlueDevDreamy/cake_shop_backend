@@ -15,9 +15,9 @@ public class CakeCreateDto {
     @Min(value = 0, message = "Price per kilo must be a positive number")
     private int pricePerKilo;
     private int decorationPrice;
-    @Min(value = 2, message = "Min weight must be greater than 2")
+    @Min(value = 1, message = "Min weight must be greater than 1")
     private int minWeight;
-    @Max(value = 30, message = "Max weight must be less than 30")
+    @Max(value = 31, message = "Max weight must be less than 30")
     private int maxWeight;
     @Min(value = 1, message = "Min tier must be greater than 1")
     private int minTier;

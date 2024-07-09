@@ -22,10 +22,10 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @EntityListeners({AuditingEntityListener.class})
 public class BaseEntity implements Serializable {
-    @Version
-    @Builder.Default
-    @ToString.Exclude
-    protected Long version = 1L;
+//    @Version
+//    @Builder.Default
+//    @ToString.Exclude
+//    protected Long version = 1L;
 
 //    @ToString.Exclude
 //    @CreatedDate

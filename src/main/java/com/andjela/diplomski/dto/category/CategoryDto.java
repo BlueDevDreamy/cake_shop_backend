@@ -1,6 +1,5 @@
 package com.andjela.diplomski.dto.category;
 
-import com.andjela.diplomski.entity.codebook.Category;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoryDto {
+    private Long id;
     private String name;
-    private Category parentCategory;
-    private int level;
 }

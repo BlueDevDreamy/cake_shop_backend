@@ -3,7 +3,9 @@ package com.andjela.diplomski.controller;
 import com.andjela.diplomski.dto.cake.CakeCreateDto;
 import com.andjela.diplomski.dto.cake.CakeDto;
 import com.andjela.diplomski.dto.cake.CakeUpdateDto;
+import com.andjela.diplomski.dto.category.CategoryDto;
 import com.andjela.diplomski.service.CakeService;
+import com.andjela.diplomski.service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ import java.util.List;
 public class AdminCakeController {
 
     private final CakeService cakeService;
+    private final CategoryService categoryService;
 
     //Istestirano u POSTMAN-u
     @PostMapping
@@ -60,6 +63,12 @@ public class AdminCakeController {
     public ResponseEntity<String> deleteCake(@PathVariable Long id) {
         cakeService.deleteCake(id);
         return new ResponseEntity<>("Deleted successfully", HttpStatus.OK);
+    }
+
+    @GetMapping("/categories")
+    public ResponseEntity<List<CategoryDto>> getAllCategories() {
+        List<CategoryDto> categoryDtoList = categoryService.getAllCategories();
+        return new ResponseEntity<>(categoryDtoList, HttpStatus.OK);
     }
 
 }
