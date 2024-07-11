@@ -24,7 +24,7 @@ public class CartItemDto {
     private Long cakeId;
     private String cakeTitle;
     private String cakeImageUrl;
-    private List<CartItemFlavorTierDto> flavors; // Promenjeno u CartItemFlavorTierDto
+    private List<CartItemFlavorTierDto> flavors;
     private String note;
     private int fakeTier;
     private Long userId;

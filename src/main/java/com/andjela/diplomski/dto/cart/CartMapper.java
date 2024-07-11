@@ -11,16 +11,9 @@ import java.util.List;
 public interface CartMapper {
     CartMapper MAPPER = Mappers.getMapper(CartMapper.class);
 
-    //    @Mapping(source = "cartItems", target = "cartItems", ignore = true)
-//    @Mapping(target = "cartItems", ignore = true)
-
-//    @Mapping(target = "cartItems", source = "cartItems")
-
-//    @Mapping(target = "cartItems", source = "cartItems")
     @Mapping(source = "user.id", target = "userId")
     CartDto mapToCartDto(Cart cart);
 
-//    @Mapping(target = "cartItems", source = "cartItems")
     Cart mapToCart(CartDto cartDto);
 
 }

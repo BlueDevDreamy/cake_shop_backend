@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface ICakeService {
-//    CakeDto createCake(CakeDto cakeDto);
     CakeDto createCake(CakeCreateDto cakeDto);
     CakeDto getCakeById(Long cakeId);
     List<CakeDto> getCakes();

@@ -11,6 +11,4 @@ public interface FlavorMapper {
     FlavorMapper MAPPER = Mappers.getMapper(FlavorMapper.class);
 
     FlavorDto mapToFlavorDto(Flavor flavor);
-    Flavor mapToFlavor(FlavorDto flavorDto);
-    List<FlavorDto> mapToListFlavorDto(List<Flavor> flavors);
 }

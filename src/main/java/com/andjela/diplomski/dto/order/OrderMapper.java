@@ -14,8 +14,6 @@ public interface OrderMapper {
     @Mapping(target = "orderItems", source = "orderItems")
     OrderDto mapToOrderDto(Order order);
 
-    Order mapToOrder(OrderDto orderDto);
-
     List<OrderDto> mapToListOrderDto(List<Order> orders);
 
 }

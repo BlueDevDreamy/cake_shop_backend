@@ -77,43 +77,6 @@ public class CartService implements ICartService {
         return cartItemDto;
     }
 
-//    @Override
-//    public String addCartItem(Long userId, CartItemCreateDto req) {
-//        Cart cart = cartRepository.findUserById(userId);
-//
-//        Cake cake = cakeRepository.findById(req.getCakeId())
-//                .orElseThrow(() -> new RuntimeException("Cake with id " + req.getCakeId() + " not found"));
-//
-//        List<CartItemFlavorTier> cartItemFlavorTiers = new ArrayList<>();
-//        for (int tier = 0; tier < req.getFlavors().size(); tier++) {
-//            Long flavorId = req.getFlavors().get(tier);
-//            Flavor flavor = flavorRepository.findById(flavorId)
-//                    .orElseThrow(() -> new RuntimeException("Flavor with id " + flavorId + " not found"));
-//
-//            CartItemFlavorTier cartItemFlavorTier = CartItemFlavorTier.builder()
-//                    .flavor(flavor)
-//                    .tier((long)tier + 1)
-//                    .createdAt(LocalDateTime.now())
-//                    .build();
-//            cartItemFlavorTiers.add(cartItemFlavorTier);
-//        }
-//
-//        CartItem cartItem = createCartItem(userId, req, cake, cart, cartItemFlavorTiers);
-//        cartItemRepository.save(cartItem);
-//
-//        int totalPrice = 0;
-//        int totalItems = 0;
-//        for (CartItem c : cart.getCartItems()) {
-//            totalPrice += c.getTotalPrice();
-//            totalItems++;
-//        }
-//        cart.setTotalPrice(totalPrice);
-//        cart.setTotalItem(totalItems);
-//        cartRepository.save(cart);
-//
-//        return "Item added to cart";
-//    }
-
     private CartItem createCartItem(Long userId, CartItemCreateDto req, Cake cake, Cart cart, List<CartItemFlavorTier> cartItemFlavorTiers) {
         CartItem cartItem = CartItem.builder()
                 .selectedWeight(req.getSelectedWeight())

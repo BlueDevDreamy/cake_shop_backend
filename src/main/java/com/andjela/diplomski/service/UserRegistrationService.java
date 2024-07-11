@@ -135,23 +135,11 @@ public class UserRegistrationService {
 
     @Transactional
     public UserDto registerAdmin(RegisterAdminDto request) {
-//        if(!AuthHelper.currentUserIsSuperAdmin()) {
-//            throw new ApiValidationException("Not enough privilegies to create admin.");
-//        }
-        return registerUser(request);
-    }
-
-    @Transactional
-    public UserDto registerEmployee(RegisterEmployeeDto request) {
-        if (!AuthHelper.currentUserIsSuperAdmin()) {
-            throw new ApiValidationException("Not enough privilegies to create employee.");
-        }
         return registerUser(request);
     }
 
     @Transactional
     public UserDto registerClient(RegisterClientDto request) {
-        //CartDto cartDto = cartService.createCart(registerUser(request)); // Nisam sigurna da li je ispravno ovako da dodam cart samo klijent useru
         return registerUser(request);
     }
 

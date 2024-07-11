@@ -6,7 +6,6 @@ import com.andjela.diplomski.dto.auth.*;
 import com.andjela.diplomski.dto.user.UserDto;
 import com.andjela.diplomski.dto.user.UserData;
 import com.andjela.diplomski.dto.user.UserMapper;
-import com.andjela.diplomski.dto.user.UserUpdateDto;
 import com.andjela.diplomski.entity.Authority;
 import com.andjela.diplomski.entity.PasswordResetToken;
 import com.andjela.diplomski.entity.RegistrationToken;
@@ -77,20 +76,20 @@ public class UserService implements IUserService {
         return UserMapper.MAPPER.mapToUserDTO(user);
     }
 
-    @Override
-    public UserDto updateUser(Long id, UserUpdateDto userUpdateDto) {
-        User updatedUser = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Entity whit id " + id + " could not be updated"));
-        updatedUser.setFirstName(userUpdateDto.getFirstName());
-        updatedUser.setLastName(userUpdateDto.getLastName());
-        updatedUser.setEmail(userUpdateDto.getEmail());
-        updatedUser.setPassword(userUpdateDto.getPassword());
-        updatedUser.setPhoneNumber(userUpdateDto.getPhoneNumber());
-        updatedUser.setUpdatedAt(LocalDateTime.now());
-
-        userRepository.save(updatedUser);
-
-        return UserMapper.MAPPER.mapToUserDTO(updatedUser);
-    }
+//    @Override
+//    public UserDto updateUser(Long id, UserUpdateDto userUpdateDto) {
+//        User updatedUser = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Entity whit id " + id + " could not be updated"));
+//        updatedUser.setFirstName(userUpdateDto.getFirstName());
+//        updatedUser.setLastName(userUpdateDto.getLastName());
+//        updatedUser.setEmail(userUpdateDto.getEmail());
+//        updatedUser.setPassword(userUpdateDto.getPassword());
+//        updatedUser.setPhoneNumber(userUpdateDto.getPhoneNumber());
+//        updatedUser.setUpdatedAt(LocalDateTime.now());
+//
+//        userRepository.save(updatedUser);
+//
+//        return UserMapper.MAPPER.mapToUserDTO(updatedUser);
+//    }
 
     @Override
     public void deleteUser(Long id) {

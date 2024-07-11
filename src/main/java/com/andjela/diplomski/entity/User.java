@@ -2,20 +2,15 @@ package com.andjela.diplomski.entity;
 
 import com.andjela.diplomski.common.BaseEntity;
 import com.andjela.diplomski.common.UserType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.UuidGenerator;
-import org.hibernate.type.SqlTypes;
 
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 @SuperBuilder(toBuilder = true)
 @Data
@@ -44,9 +39,6 @@ public class User extends BaseEntity {
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Address> addresses;
-
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "user_addresses",
@@ -54,12 +46,6 @@ public class User extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "address_id")
     )
     private List<Address> addresses;
-
-//    @Embedded
-//    @ElementCollection
-//    @CollectionTable(name = "payment_information", joinColumns = @JoinColumn(name = "user_id"))
-//    private List<PaymentInformation> paymentInformation;
-
 
     @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.EAGER)
@@ -73,9 +59,9 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private UserType userType;
 
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @UuidGenerator
-    @JdbcTypeCode(SqlTypes.CHAR)
-    @Column(columnDefinition = "char(36)", nullable = false)
-    private UUID uuid;
+//    @GeneratedValue(strategy = GenerationType.UUID)
+//    @UuidGenerator
+//    @JdbcTypeCode(SqlTypes.CHAR)
+//    @Column(columnDefinition = "char(36)", nullable = false)
+//    private UUID uuid;
 }

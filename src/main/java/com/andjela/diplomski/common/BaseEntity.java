@@ -22,15 +22,6 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @EntityListeners({AuditingEntityListener.class})
 public class BaseEntity implements Serializable {
-//    @Version
-//    @Builder.Default
-//    @ToString.Exclude
-//    protected Long version = 1L;
-
-//    @ToString.Exclude
-//    @CreatedDate
-    //   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-//    @Column(name = "created_at", updatable = false)
 
     @CreatedDate
     @Column(updatable = false, nullable = false, name = "created_at")
@@ -38,12 +29,10 @@ public class BaseEntity implements Serializable {
 
     @ToString.Exclude
     @LastModifiedDate
-    //   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Column(name = "updated_at", updatable = true, insertable = false)
     protected LocalDateTime updatedAt;
 
     @ToString.Exclude
-    //   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Column(name = "deleted_at")
     protected LocalDateTime deletedAt;
 

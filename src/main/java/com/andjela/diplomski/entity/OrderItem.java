@@ -1,7 +1,6 @@
 package com.andjela.diplomski.entity;
 
 import com.andjela.diplomski.common.BaseEntity;
-import com.andjela.diplomski.entity.codebook.Flavor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -9,13 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.UuidGenerator;
-import org.hibernate.type.SqlTypes;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @SuperBuilder(toBuilder = true)
 @Data
@@ -44,13 +38,9 @@ public class OrderItem extends BaseEntity {
     @Column(name = "total_price", nullable = false)
     private int totalPrice;
 
-    //    @ManyToOne(fetch = FetchType.EAGER)
     @ManyToOne
     @JoinColumn(name = "cake_id")
     private Cake cake;
-
-//    @OneToMany
-//    private List<Flavor> flavors;
 
     @Column(name = "note")
     private String note;
@@ -68,8 +58,5 @@ public class OrderItem extends BaseEntity {
 
     @Column(name = "user_id")
     private Long userId;
-
-//    @Column(name = "discounted_price")
-//    private int discountedPrice;
 
 }

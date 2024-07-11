@@ -92,13 +92,6 @@ public class CakeService implements ICakeService {
         return CakeMapper.MAPPER.mapToCakeDto(foundCake);
     }
 
-    //    @Override
-//    public void deleteCake(Long cakeId) {
-//        if (!cakeRepository.existsById(cakeId)) {
-//            throw new ResourceNotFoundException("Didn't find cake with id:" + cakeId);
-//        }
-//        cakeRepository.deleteById(cakeId);
-//    }
     @Override
     public void deleteCake(Long cakeId) {
         Optional<Cake> cakeOptional = cakeRepository.findById(cakeId);
@@ -106,7 +99,7 @@ public class CakeService implements ICakeService {
             throw new ResourceNotFoundException("Didn't find cake with id: " + cakeId);
         }
         Cake cake = cakeOptional.get();
-        cake.setCategory(null); // Uklonite vezu sa kategorijom
+        cake.setCategory(null);
         cakeRepository.delete(cake);
     }
 
@@ -124,19 +117,6 @@ public class CakeService implements ICakeService {
         return CakeMapper.MAPPER.mapToListCakeDto(cakes);
     }
 
-    //    @Override
-//    public Page<Cake> getAllCakesPageable(String category, int minWeight, int maxWeight, int minTier, int maxTier, String sort, Integer pageNumber, Integer pageSize) {
-//        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-//
-//        List<Cake> cakes = cakeRepository.filterCakes(category, minWeight, maxWeight, minTier, maxTier, sort);
-//
-//        int startIndex = (int) pageable.getOffset();
-//        int endIndex = Math.min(startIndex + pageable.getPageSize(), cakes.size());
-//
-//        List<Cake> pageContent = cakes.subList(startIndex, endIndex);
-//        Page<Cake> filteredCakes = new PageImpl<>(pageContent, pageable, cakes.size());
-//        return filteredCakes;
-//    }
     @Override
     public Page<Cake> getAllCakesPageable(String category, int minWeight, int maxWeight, int minTier, int maxTier, String sort, Integer pageNumber, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sort));
@@ -157,16 +137,4 @@ public class CakeService implements ICakeService {
         return CakeMapper.MAPPER.mapToListCakeDto(cakes);
     }
 
-//    @Override
-//    public List<CakeResponse> getAllCakes() {
-//        List<Cake> cakes = cakeRepository.findAll();
-//        for (Cake cake : cakes) {
-//            System.out.println("Cake: {}" + cake);
-//            System.out.println("Cake category: {}" + cake.getCategory());
-//            if (cake.getCategory() != null) {
-//                System.out.println("Category Name: {} "+ cake.getCategory().getName());
-//            }
-//        }
-//        return CakeMapper.MAPPER.mapToListCakeResponse(cakes);
-//    }
 }

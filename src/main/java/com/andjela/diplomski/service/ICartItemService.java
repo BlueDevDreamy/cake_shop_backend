@@ -6,6 +6,7 @@ import com.andjela.diplomski.dto.cartItem.CartItemDto;
 
 public interface ICartItemService {
     CartItemDto createCartItem(CartItemDto cartItemDto);
+
     CartItemDto updateCartItem(Long userId, Long id, CartItemDto cartItemDto);
 
     CartItemDto isCartItemExists(CartDto cartDto, CakeDto cakeDto, Long userId);

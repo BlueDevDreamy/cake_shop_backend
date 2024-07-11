@@ -1,20 +1,14 @@
 package com.andjela.diplomski.entity;
 
 import com.andjela.diplomski.common.BaseEntity;
-import com.andjela.diplomski.entity.codebook.Flavor;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.UuidGenerator;
-import org.hibernate.type.SqlTypes;
 
 import java.util.List;
-import java.util.UUID;
 
 @SuperBuilder(toBuilder = true)
 @Data
@@ -62,19 +56,4 @@ public class CartItem extends BaseEntity {
     @Column(name = "user_id")
     private Long userId;
 
-    @Override
-    public String toString() {
-        return "CartItem{" +
-                "id=" + id +
-                ", selectedWeight=" + selectedWeight +
-                ", selectedTiers=" + selectedTiers +
-                ", piecesNumber=" + piecesNumber +
-                ", totalPrice=" + totalPrice +
-                ", cake=" + cake +
-                ", note='" + note + '\'' +
-                ", fakeTier=" + fakeTier +
-                ", cart=" + cart +
-                ", userId=" + userId +
-                '}';
-    }
 }

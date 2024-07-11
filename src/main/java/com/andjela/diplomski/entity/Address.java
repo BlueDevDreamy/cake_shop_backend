@@ -1,19 +1,13 @@
 package com.andjela.diplomski.entity;
 
 import com.andjela.diplomski.common.BaseEntity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.UuidGenerator;
-import org.hibernate.type.SqlTypes;
 
 import java.util.List;
-import java.util.UUID;
 
 @SuperBuilder(toBuilder = true)
 @Data
@@ -37,15 +31,5 @@ public class Address extends BaseEntity {
 
     @ManyToMany(mappedBy = "addresses")
     private List<User> users;
-
-//    @ManyToOne
-//    @JoinColumn(name = "user_id56")
-//    private User user;
-
-//    @JsonIgnore
-//    @ToString.Exclude
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
 
 }

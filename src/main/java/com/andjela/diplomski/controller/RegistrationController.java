@@ -3,7 +3,6 @@ package com.andjela.diplomski.controller;
 import com.andjela.diplomski.common.TokenStatus;
 import com.andjela.diplomski.dto.auth.RegisterAdminDto;
 import com.andjela.diplomski.dto.auth.RegisterClientDto;
-import com.andjela.diplomski.dto.auth.RegisterEmployeeDto;
 import com.andjela.diplomski.dto.auth.RegistrationPasswordDto;
 import com.andjela.diplomski.dto.user.UserDto;
 import com.andjela.diplomski.service.CartItemService;
@@ -31,28 +30,16 @@ public class RegistrationController {
     @Value("${frontend.baseUrl}")
     private String frontBaseUrl;
 
-    //Istestirano u POSTMAN-u
     @PostMapping("register-admin")
-    public ResponseEntity<UserDto> registerAdmin(@RequestBody @Valid RegisterAdminDto request){
+    public ResponseEntity<UserDto> registerAdmin(@RequestBody @Valid RegisterAdminDto request) {
         UserDto user = userRegistrationService.registerAdmin(request);
 
         final HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<>(user, headers, HttpStatus.CREATED);
     }
 
-    //Istestirano u POSTMAN-u
-    @PostMapping("register-employee")
-    public ResponseEntity<UserDto> registerEmployee(@RequestBody @Valid RegisterEmployeeDto request){
-        UserDto user = userRegistrationService.registerEmployee(request);
-
-        final HttpHeaders headers = new HttpHeaders();
-        return new ResponseEntity<>(user, headers, HttpStatus.CREATED);
-    }
-
-    //Istestirano u POSTMAN-u
-    //Cim se klijen t registruje dodeljuje mu se cart
     @PostMapping("register-client")
-    public ResponseEntity<UserDto> registerClient(@RequestBody @Valid RegisterClientDto request){
+    public ResponseEntity<UserDto> registerClient(@RequestBody @Valid RegisterClientDto request) {
         UserDto user = userRegistrationService.registerClient(request);
         cartService.createCart(user);
 
@@ -60,12 +47,11 @@ public class RegistrationController {
         return new ResponseEntity<>(user, headers, HttpStatus.CREATED);
     }
 
-    // Confirm token
     @GetMapping("confirm-token")
     public ResponseEntity<String> confirmRegistrationToken(@RequestParam(value = "token", required = true) String token) {
         TokenStatus tokenStatus = userRegistrationService.confirmRegistrationToken(token);
 
-        if(tokenStatus == TokenStatus.VALID) {
+        if (tokenStatus == TokenStatus.VALID) {
             String response = "Token potvrdjen. Mozete se ulogovati: " + frontBaseUrl;
             return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
@@ -73,12 +59,6 @@ public class RegistrationController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
-    // User activation - verification
-//    @GetMapping("resend-token/{email}")
-//    public ResponseEntity<String> resendRegistrationToken(@PathVariable("email") final String email) {
-//        String response = userRegistrationService.resendRegistrationTokenForEmail(email);
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
 
     // Save password
     @PostMapping("save-password")

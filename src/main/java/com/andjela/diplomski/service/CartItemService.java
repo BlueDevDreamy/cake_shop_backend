@@ -32,58 +32,7 @@ public class CartItemService implements ICartItemService {
 
     private final CartItemRepository cartItemRepository;
     private final UserService userService;
-    private final CartRepository cartRepository;
-    private final CakeRepository cakeRepository;
-    private final OrderService orderService;
     private final OrderRepository orderRepository;
-
-    @Override
-    public CartItemDto createCartItem(CartItemDto cartItemDto) {
-//        CartItem cartItem = CartItemMapper.MAPPER.mapToCartItem(cartItemDto);
-//        System.out.println(cartItemDto.getNote());
-////        Cake cake = cakeRepository.findById(cartItem.getCake().getId()).orElseThrow(() -> new ResourceNotFoundException("Didn't find cake with id " + cartItemDto.getCakeId()));
-//        Cake cake = cakeRepository.findById(cartItemDto.getCakeId()).orElseThrow(() -> new ResourceNotFoundException("Didn't find cake with id " + cartItemDto.getCakeId()));
-//        Cart cart = cartRepository.findById(cartItemDto.getCart().getId()).orElseThrow(() -> new ResourceNotFoundException("Didn't find cart with id " + cartItem.getCart().getId()));
-//
-//        CartItem createCartItem = CartItem.builder()
-//                .selectedWeight(cartItemDto.getSelectedWeight())
-//                .selectedTiers(cartItemDto.getSelectedTiers())
-//                //Mozda ovde izracunati pieces number i price
-//                .piecesNumber(cartItemDto.getPiecesNumber())
-//                .totalPrice(cartItemDto.getTotalPrice())
-//                .cake(cake)
-////                .flavors(cartItemDto.getFlavors())
-//                .note(cartItemDto.getNote())
-//                .fakeTier(cartItemDto.getFakeTier())
-////                .cart(cartItemDto.getCart())
-//                .cart(cart)
-//                .userId(cartItem.getUserId())
-//                .build();
-//        cartItemRepository.save(createCartItem);
-//        return CartItemMapper.MAPPER.mapToCartItemDto(createCartItem);
-        return null;
-    }
-
-    @Override
-    public CartItemDto updateCartItem(Long userId, Long id, CartItemDto cartItemDto) {
-        CartItem existingCartItem = cartItemRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("CartItem with id " + id + " not found"));
-
-        if (!existingCartItem.getUserId().equals(userId)) {
-//            throw new AuthorizationException("You are not authorized to update this cart item");
-            System.out.println("You are not authorized to update this cart item");
-        }
-        existingCartItem.setSelectedWeight(cartItemDto.getSelectedWeight());
-        existingCartItem.setPiecesNumber(cartItemDto.getPiecesNumber());
-        existingCartItem.setTotalPrice(cartItemDto.getTotalPrice());
-        existingCartItem.setNote(cartItemDto.getNote());
-
-        // Čuvamo promene u bazi podataka
-        CartItem updatedCartItem = cartItemRepository.save(existingCartItem);
-
-        // Mapiramo ažurirani cart item u DTO format pre nego što ga vratimo
-        return CartItemMapper.MAPPER.mapToCartItemDto(updatedCartItem);
-    }
 
     @Transactional
     public CartItemDto increaseCartItemWeight(Long userId, Long cartItemId) {
@@ -91,14 +40,13 @@ public class CartItemService implements ICartItemService {
                 .orElseThrow(() -> new ResourceNotFoundException("CartItem with id " + cartItemId + " not found"));
 
         if (!existingCartItem.getUserId().equals(userId)) {
-//            throw new AuthorizationException("You are not authorized to update this cart item");
             System.out.println("You are not authorized to update this cart item");
 
         }
 
         if(existingCartItem.getSelectedWeight() <= existingCartItem.getCake().getMaxWeight()){
             existingCartItem.setSelectedWeight(existingCartItem.getSelectedWeight() + 1);
-            existingCartItem.setPiecesNumber(existingCartItem.getPiecesNumber() + 8); //U jednom kg ima 8 parcica
+            existingCartItem.setPiecesNumber(existingCartItem.getPiecesNumber() + 8);
             existingCartItem.setTotalPrice(existingCartItem.getTotalPrice() + existingCartItem.getCake().getPricePerKilo());
         }else {
             System.out.println("Exceeded maximum weight of this cart item");
@@ -114,7 +62,6 @@ public class CartItemService implements ICartItemService {
                 .orElseThrow(() -> new ResourceNotFoundException("CartItem with id " + cartItemId + " not found"));
 
         if (!existingCartItem.getUserId().equals(userId)) {
-//            throw new AuthorizationException("You are not authorized to update this cart item");
             System.out.println("You are not authorized to update this cart item");
 
         }
@@ -129,6 +76,16 @@ public class CartItemService implements ICartItemService {
         CartItem updatedCartItem = cartItemRepository.save(existingCartItem);
 
         return CartItemMapper.MAPPER.mapToCartItemDto(updatedCartItem);
+    }
+
+    @Override
+    public CartItemDto createCartItem(CartItemDto cartItemDto) {
+        return null;
+    }
+
+    @Override
+    public CartItemDto updateCartItem(Long userId, Long id, CartItemDto cartItemDto) {
+        return null;
     }
 
     @Override

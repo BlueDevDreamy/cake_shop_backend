@@ -1,7 +1,6 @@
 package com.andjela.diplomski.utils;
 
 import com.andjela.diplomski.common.AuthorityPermissionEnum;
-import com.andjela.diplomski.security.SecurityUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +21,5 @@ public class AuthHelper {
             return false;
         }
         return authorities.stream().map(a -> a.getAuthority()).filter(a -> a.equalsIgnoreCase(authority.name())).findAny().isPresent();
-//return true;
     }
 }

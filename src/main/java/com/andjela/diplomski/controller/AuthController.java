@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 @Slf4j
 @AllArgsConstructor
 @RestController
@@ -23,14 +24,12 @@ public class AuthController {
     private final AuthService authService;
     private final RefreshTokenService refreshTokenService;
 
-    //Istestirano u POSTMAN-u
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto request) {
         LoginResponseDto responseDto = authService.login(request);
         return ResponseEntity.ok(responseDto);
     }
 
-    //Istestirano u POSTMAN-u
     @PostMapping("/refreshtoken")
     public ResponseEntity<?> refreshToken(@Valid @RequestBody TokenRefreshRequestDto request) {
         String requestRefreshToken = request.getRefreshToken();

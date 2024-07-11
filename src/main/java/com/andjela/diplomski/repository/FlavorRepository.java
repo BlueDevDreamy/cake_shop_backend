@@ -7,5 +7,4 @@ import java.util.List;
 import java.util.Set;
 
 public interface FlavorRepository extends JpaRepository<Flavor, Long> {
-    List<Flavor> findAllByIdIn(List<Long> ids);
 }

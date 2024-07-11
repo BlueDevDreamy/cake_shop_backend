@@ -23,9 +23,6 @@ public class OrderItemDto {
     private int piecesNumber;
     private int totalPrice;
     private CakeDto cake;
-//    private Long cakeId;
-//    private String cakeTitle;
-//    private String cakeImageUrl;
     private List<OrderItemFlavorTier> flavors;
     private String note;
     private int fakeTier;

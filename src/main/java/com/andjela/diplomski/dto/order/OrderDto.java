@@ -20,9 +20,9 @@ public class OrderDto {
     private String orderNumber;
     private UserDto user;
     private List<OrderItemDto> orderItems;
-    @JsonFormat(pattern="dd.MM.yyyy")
+    @JsonFormat(pattern = "dd.MM.yyyy")
     private LocalDateTime orderDate;
-    @JsonFormat(pattern="dd.MM.yyyy")
+    @JsonFormat(pattern = "dd.MM.yyyy")
     private LocalDateTime deliveryDate;
     private AddressDto shippingAddress;
     private Integer totalPrice;

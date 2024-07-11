@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OrderItemFlavorTierDto {
     private Long id;
-    private Long orderItemId; // dodajte id cartItem-a za referencu
+    private Long orderItemId;
     private Long flavorId;
     private String flavorName;
     private String flavorDescription;

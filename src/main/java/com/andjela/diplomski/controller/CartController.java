@@ -20,19 +20,18 @@ public class CartController {
     private final CartService cartService;
     private final UserService userService;
 
-    //Istestirano u POSTMAN-u
     @GetMapping
-    public ResponseEntity<CartDto> getUserCart(@RequestHeader("Authorization") String jwt){
+    public ResponseEntity<CartDto> getUserCart(@RequestHeader("Authorization") String jwt) {
         User user = userService.getUserByJwt(jwt);
         CartDto cartDto = cartService.getUserCart(user.getId());
         return new ResponseEntity<>(cartDto, HttpStatus.OK);
     }
-    //Istestirano u POSTMAN-u
+
     @PutMapping("/add")
-    public ResponseEntity<CartItemDto> addItemToCart(@RequestBody CartItemCreateDto req, @RequestHeader("Authorization") String jwt){
+    public ResponseEntity<CartItemDto> addItemToCart(@RequestBody CartItemCreateDto req, @RequestHeader("Authorization") String jwt) {
         User user = userService.getUserByJwt(jwt);
-        CartItemDto res  = cartService.addCartItem(user.getId(), req);
-        return new ResponseEntity<>(res,HttpStatus.ACCEPTED);
+        CartItemDto res = cartService.addCartItem(user.getId(), req);
+        return new ResponseEntity<>(res, HttpStatus.ACCEPTED);
     }
 
 }

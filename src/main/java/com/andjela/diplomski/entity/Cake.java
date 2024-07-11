@@ -44,14 +44,7 @@ public class Cake extends BaseEntity {
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
-    //    @ManyToOne(cascade = CascadeType.ALL)
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Category category;
 
-    @Override
-    public String toString() {
-        return "Cake{" +
-                "title='" + title + '\'' +
-                '}';
-    }
 }

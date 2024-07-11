@@ -1,7 +1,6 @@
 package com.andjela.diplomski.entity;
 
 import com.andjela.diplomski.common.BaseEntity;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -9,15 +8,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.UuidGenerator;
-import org.hibernate.type.SqlTypes;
 
 import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 
 @SuperBuilder(toBuilder = true)
 @Data
@@ -34,15 +27,6 @@ public class Cart extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
-    //    @JsonBackReference
-
-//    @JsonManagedReference
-
-
-//    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-////    @Column(name = "cart_items")
-//    private List<CartItem> cartItems;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
@@ -61,16 +45,4 @@ public class Cart extends BaseEntity {
     @Column(name = "discount")
     private int discount;
 
-    @Override
-    public String toString() {
-        return "Cart{" +
-                "id=" + id +
-                ", user=" + user +
-                ", cartItems=" + cartItems +
-                ", totalPrice=" + totalPrice +
-                ", totalItem=" + totalItem +
-                ", totalDiscountedPrice=" + totalDiscountedPrice +
-                ", discount=" + discount +
-                '}';
-    }
 }

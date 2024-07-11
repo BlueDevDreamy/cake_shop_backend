@@ -24,7 +24,6 @@ public interface CartItemMapper {
     @Mapping(target = "flavors", source = "cartItemFlavorTiers")
     CartItemDto mapToCartItemDto(CartItem cartItem);
 
-//    CartItem mapToCartItem(CartItemDto cartItemDto);
 
     @Mapping(source = "cartItem.id", target = "cartItemId")
     @Mapping(source = "flavor.id", target = "flavorId")

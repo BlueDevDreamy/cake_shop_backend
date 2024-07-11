@@ -18,6 +18,5 @@ public class CakeDto {
     private int minTier;
     private int maxTier;
     private String imageUrl;
-    private Category category; //Mislim da bi trebalo categoryId
-//    private Long categoryId;
+    private Category category;
 }

@@ -19,15 +19,6 @@ public class CartItemController {
     private final CartItemService cartItemService;
     private final UserService userService;
 
-    //Istestirano u POSTMAN-u
-    //CakeId je null?
-    @PutMapping("{id}")
-    public ResponseEntity<CartItemDto> updateCartItem(@RequestBody CartItemDto cartItemDto, @PathVariable Long id, @RequestHeader("Authorization") String jwt){
-        User user = userService.getUserByJwt(jwt);
-        CartItemDto updatedCartItemDto = cartItemService.updateCartItem(user.getId(), id, cartItemDto);
-        return new ResponseEntity<>(updatedCartItemDto, HttpStatus.OK);
-    }
-
     @PutMapping("{id}/increase-weight")
     public ResponseEntity<CartItemDto> increaseCartItemWeight(@PathVariable Long id, @RequestHeader("Authorization") String jwt) {
         User user = userService.getUserByJwt(jwt);
@@ -42,9 +33,8 @@ public class CartItemController {
         return new ResponseEntity<>(updatedCartItemDto, HttpStatus.OK);
     }
 
-    //Istestirano u POSTMAN-u
     @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteCartItem(@PathVariable Long id, @RequestHeader("Authorization") String jwt){
+    public ResponseEntity<String> deleteCartItem(@PathVariable Long id, @RequestHeader("Authorization") String jwt) {
         User user = userService.getUserByJwt(jwt);
         cartItemService.removeCartItem(user.getId(), id);
         return new ResponseEntity<>("Deleted successfully", HttpStatus.OK);

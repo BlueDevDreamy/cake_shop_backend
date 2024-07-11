@@ -39,9 +39,8 @@ public class Order extends BaseEntity {
     @Column(name = "delivery_date")
     private LocalDateTime deliveryDate;
 
-//    @OneToOne(cascade = CascadeType.ALL)
     @ManyToOne
-    @JoinColumn(name = "shipping_address_id", unique = false)
+    @JoinColumn(name = "shipping_address_id")
     private Address shippingAddress;
 
     @Column(name = "total_price")

@@ -9,5 +9,4 @@ public interface CategoryMapper {
     CategoryMapper MAPPER = Mappers.getMapper(CategoryMapper.class);
 
     CategoryDto mapToCategoryDto(Category category);
-    Category mapToCategory(CategoryDto categoryDto);
 }

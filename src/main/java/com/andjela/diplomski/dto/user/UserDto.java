@@ -1,7 +1,6 @@
 package com.andjela.diplomski.dto.user;
 
 import com.andjela.diplomski.dto.address.AddressDto;
-import com.andjela.diplomski.entity.Address;
 import com.andjela.diplomski.entity.Authority;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,5 +22,4 @@ public class UserDto {
     private List<AddressDto> address;
     private List<Authority> roles;
 
-//    private List<AddressDto> address;
 }
