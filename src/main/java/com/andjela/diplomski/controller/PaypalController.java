@@ -35,7 +35,7 @@ public class PaypalController {
     private final CartItemService cartItemService;
 
     @PostMapping("/create")
-    public ResponseEntity<Map<String, String>> createPayment(@RequestParam Integer total,
+    public ResponseEntity<Map<String, String>> createPayment(@RequestParam Double total,
                                                              @RequestParam String currency,
                                                              @RequestParam String description) {
         try {

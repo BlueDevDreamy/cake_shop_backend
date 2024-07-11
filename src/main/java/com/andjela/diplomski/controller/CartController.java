@@ -2,6 +2,7 @@ package com.andjela.diplomski.controller;
 
 import com.andjela.diplomski.dto.cart.CartDto;
 import com.andjela.diplomski.dto.cartItem.CartItemCreateDto;
+import com.andjela.diplomski.dto.cartItem.CartItemDto;
 import com.andjela.diplomski.entity.User;
 import com.andjela.diplomski.service.CartService;
 import com.andjela.diplomski.service.UserService;
@@ -28,9 +29,9 @@ public class CartController {
     }
     //Istestirano u POSTMAN-u
     @PutMapping("/add")
-    public ResponseEntity<String> addItemToCart(@RequestBody CartItemCreateDto req, @RequestHeader("Authorization") String jwt){
+    public ResponseEntity<CartItemDto> addItemToCart(@RequestBody CartItemCreateDto req, @RequestHeader("Authorization") String jwt){
         User user = userService.getUserByJwt(jwt);
-        String res  = cartService.addCartItem(user.getId(), req);
+        CartItemDto res  = cartService.addCartItem(user.getId(), req);
         return new ResponseEntity<>(res,HttpStatus.ACCEPTED);
     }
 

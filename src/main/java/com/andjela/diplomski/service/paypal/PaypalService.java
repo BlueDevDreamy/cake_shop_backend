@@ -16,7 +16,7 @@ public class PaypalService {
     private final APIContext apiContext;
 
     public Payment createPayment(
-            Integer total,
+            Double total,
             String currency,
             String method,
             String intent,
@@ -25,7 +25,7 @@ public class PaypalService {
             String successUrl) throws PayPalRESTException {
         Amount amount = new Amount();
         amount.setCurrency(currency);
-        amount.setTotal(String.format(Locale.forLanguageTag(currency), "%d", total));
+        amount.setTotal(String.format(Locale.forLanguageTag(currency), "%,.2f", total));
 
 
         Transaction transaction = new Transaction();

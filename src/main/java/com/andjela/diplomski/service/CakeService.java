@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -68,7 +69,8 @@ public class CakeService implements ICakeService {
         }
         return foundCakes;
     }
-@Transactional
+
+    @Transactional
     @Override
     public CakeDto updateCake(Long id, CakeUpdateDto cakeUpdateDto) {
         Cake foundCake = cakeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Entity whit id " + id + " could not be updated"));
@@ -90,13 +92,24 @@ public class CakeService implements ICakeService {
         return CakeMapper.MAPPER.mapToCakeDto(foundCake);
     }
 
+    //    @Override
+//    public void deleteCake(Long cakeId) {
+//        if (!cakeRepository.existsById(cakeId)) {
+//            throw new ResourceNotFoundException("Didn't find cake with id:" + cakeId);
+//        }
+//        cakeRepository.deleteById(cakeId);
+//    }
     @Override
     public void deleteCake(Long cakeId) {
-        if (!cakeRepository.existsById(cakeId)) {
-            throw new ResourceNotFoundException("Didn't find cake with id:" + cakeId);
+        Optional<Cake> cakeOptional = cakeRepository.findById(cakeId);
+        if (!cakeOptional.isPresent()) {
+            throw new ResourceNotFoundException("Didn't find cake with id: " + cakeId);
         }
-        cakeRepository.deleteById(cakeId);
+        Cake cake = cakeOptional.get();
+        cake.setCategory(null); // Uklonite vezu sa kategorijom
+        cakeRepository.delete(cake);
     }
+
 
     @Override
     public List<CakeDto> findCakeByCategory(String category) {
@@ -111,7 +124,7 @@ public class CakeService implements ICakeService {
         return CakeMapper.MAPPER.mapToListCakeDto(cakes);
     }
 
-//    @Override
+    //    @Override
 //    public Page<Cake> getAllCakesPageable(String category, int minWeight, int maxWeight, int minTier, int maxTier, String sort, Integer pageNumber, Integer pageSize) {
 //        Pageable pageable = PageRequest.of(pageNumber, pageSize);
 //
@@ -124,19 +137,19 @@ public class CakeService implements ICakeService {
 //        Page<Cake> filteredCakes = new PageImpl<>(pageContent, pageable, cakes.size());
 //        return filteredCakes;
 //    }
-@Override
-public Page<Cake> getAllCakesPageable(String category, int minWeight, int maxWeight, int minTier, int maxTier, String sort, Integer pageNumber, Integer pageSize) {
-    Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sort));
+    @Override
+    public Page<Cake> getAllCakesPageable(String category, int minWeight, int maxWeight, int minTier, int maxTier, String sort, Integer pageNumber, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sort));
 
-    List<Cake> cakes = cakeRepository.filterCakes(category, minWeight, maxWeight, minTier, maxTier, sort);
+        List<Cake> cakes = cakeRepository.filterCakes(category, minWeight, maxWeight, minTier, maxTier, sort);
 
-    int startIndex = (int) pageable.getOffset();
-    int endIndex = Math.min(startIndex + pageable.getPageSize(), cakes.size());
+        int startIndex = (int) pageable.getOffset();
+        int endIndex = Math.min(startIndex + pageable.getPageSize(), cakes.size());
 
-    List<Cake> pageContent = cakes.subList(startIndex, endIndex);
-    Page<Cake> filteredCakes = new PageImpl<>(pageContent, pageable, cakes.size());
-    return filteredCakes;
-}
+        List<Cake> pageContent = cakes.subList(startIndex, endIndex);
+        Page<Cake> filteredCakes = new PageImpl<>(pageContent, pageable, cakes.size());
+        return filteredCakes;
+    }
 
     @Override
     public List<CakeDto> getAllCakes() {
