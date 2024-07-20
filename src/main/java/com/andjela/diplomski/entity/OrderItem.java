@@ -30,7 +30,7 @@ public class OrderItem extends BaseEntity {
     private double selectedWeight;
 
     @Column(nullable = false, name = "selected_tiers")
-    private double selectedTiers;
+    private double selectedTiers; // this should be int
 
     @Column(name = "pieces_number")
     private int piecesNumber;
