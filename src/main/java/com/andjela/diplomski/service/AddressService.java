@@ -28,7 +28,6 @@ public class AddressService implements IAddressService {
                 .build();
 
         addressRepository.save(address);
-        AddressDto addressDto = AddressMapper.MAPPER.mapToAddressDto(address);
-        return addressDto;
+        return AddressMapper.MAPPER.mapToAddressDto(address);
     }
 }

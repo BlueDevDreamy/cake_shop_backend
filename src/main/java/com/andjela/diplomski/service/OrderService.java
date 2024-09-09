@@ -120,8 +120,7 @@ public class OrderService implements IOrderService {
         Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Didn't find order with id:" + id));
         order.setOrderStatus("PLACED");
         orderRepository.save(order);
-        OrderDto orderDto = OrderMapper.MAPPER.mapToOrderDto(order);
-        return orderDto;
+        return OrderMapper.MAPPER.mapToOrderDto(order);
     }
 
     @Override
@@ -129,8 +128,7 @@ public class OrderService implements IOrderService {
         Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Didn't find order with id:" + id));
         order.setOrderStatus("CONFIRMED");
         orderRepository.save(order);
-        OrderDto orderDto = OrderMapper.MAPPER.mapToOrderDto(order);
-        return orderDto;
+        return OrderMapper.MAPPER.mapToOrderDto(order);
     }
 
     @Override
@@ -138,8 +136,7 @@ public class OrderService implements IOrderService {
         Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Didn't find order with id:" + id));
         order.setOrderStatus("SHIPPED");
         orderRepository.save(order);
-        OrderDto orderDto = OrderMapper.MAPPER.mapToOrderDto(order);
-        return orderDto;
+        return OrderMapper.MAPPER.mapToOrderDto(order);
     }
 
     @Override
@@ -147,8 +144,7 @@ public class OrderService implements IOrderService {
         Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Didn't find order with id:" + id));
         order.setOrderStatus("DELIVERED");
         orderRepository.save(order);
-        OrderDto orderDto = OrderMapper.MAPPER.mapToOrderDto(order);
-        return orderDto;
+        return OrderMapper.MAPPER.mapToOrderDto(order);
     }
 
     @Override
@@ -156,8 +152,7 @@ public class OrderService implements IOrderService {
         Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Didn't find order with id:" + id));
         order.setOrderStatus("CANCELED");
         orderRepository.save(order);
-        OrderDto orderDto = OrderMapper.MAPPER.mapToOrderDto(order);
-        return orderDto;
+        return OrderMapper.MAPPER.mapToOrderDto(order);
     }
 
     @Override
@@ -202,7 +197,6 @@ public class OrderService implements IOrderService {
         UUID uuid = UUID.randomUUID();
         String uuidString = uuid.toString().substring(0, 4);
 
-        String orderNumber = formattedDate + "-" + uuidString;
-        return orderNumber;
+        return formattedDate + "-" + uuidString;
     }
 }

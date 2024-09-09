@@ -47,18 +47,17 @@ public class CakeService implements ICakeService {
 
         cakeRepository.save(cake);
 
-        CakeDto createdCakeDto = CakeMapper.MAPPER.mapToCakeDto(cake);
-        return createdCakeDto;
+        return CakeMapper.MAPPER.mapToCakeDto(cake);
     }
 
     @Override
     public CakeDto getCakeById(Long cakeId) {
         Cake cake = cakeRepository.findById(cakeId).orElseThrow(() -> new ResourceNotFoundException("Didn't find cake with id:" + cakeId));
-        CakeDto cakeDto = CakeMapper.MAPPER.mapToCakeDto(cake);
-        return cakeDto;
+        return CakeMapper.MAPPER.mapToCakeDto(cake);
     }
 
     @Override
+
     public List<CakeDto> getCakes() {
         List<CakeDto> foundCakes = new ArrayList<>();
         List<Cake> cakes = cakeRepository.findAll();
@@ -113,7 +112,6 @@ public class CakeService implements ICakeService {
     @Override
     public List<CakeDto> searchCakes(String query) {
         List<Cake> cakes = cakeRepository.searchCakes(query);
-        System.out.println("cakes --- " + cakes);
         return CakeMapper.MAPPER.mapToListCakeDto(cakes);
     }
 
@@ -127,8 +125,7 @@ public class CakeService implements ICakeService {
         int endIndex = Math.min(startIndex + pageable.getPageSize(), cakes.size());
 
         List<Cake> pageContent = cakes.subList(startIndex, endIndex);
-        Page<Cake> filteredCakes = new PageImpl<>(pageContent, pageable, cakes.size());
-        return filteredCakes;
+        return new PageImpl<>(pageContent, pageable, cakes.size());
     }
 
     @Override

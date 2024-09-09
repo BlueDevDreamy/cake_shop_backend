@@ -31,15 +31,13 @@ public class FlavorService implements IFlavorService {
                 .build();
 
         flavorRepository.save(flavor);
-        FlavorDto flavorDto = FlavorMapper.MAPPER.mapToFlavorDto(flavor);
-        return flavorDto;
+        return FlavorMapper.MAPPER.mapToFlavorDto(flavor);
     }
 
     @Override
     public FlavorDto getFlavorById(Long flavorId) {
         Flavor flavor = flavorRepository.findById(flavorId).orElseThrow(() -> new ResourceNotFoundException("Didn't find flavor with id:" + flavorId));
-        FlavorDto flavorDto = FlavorMapper.MAPPER.mapToFlavorDto(flavor);
-        return flavorDto;
+        return FlavorMapper.MAPPER.mapToFlavorDto(flavor);
     }
 
     @Override

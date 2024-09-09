@@ -39,22 +39,6 @@ public class UserService implements IUserService {
 
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    private final PasswordResetTokenRepository passwordResetTokenRepository;
-    private final RegistrationTokenRepository registrationTokenRepository;
-    private final AuthorityRepository authorityRepository;
-    private final PasswordEncoder passwordEncoder;
-
-    private final RegistrationTokenService registrationTokenService;
-
-
-    @Value("${frontend.resetPasswordUrl}")
-    private String frontendResetPasswordUrl;
-
-    @Value("${frontend.registrationConfirmTokenUrl}")
-    private String confirmTokenUiPageUrl;
-
-    @Value("${app.jwt.secret}")
-    private String jwtSecret;
 
     @Override
     public List<UserDto> getAllUser() {
@@ -76,21 +60,6 @@ public class UserService implements IUserService {
         return UserMapper.MAPPER.mapToUserDTO(user);
     }
 
-//    @Override
-//    public UserDto updateUser(Long id, UserUpdateDto userUpdateDto) {
-//        User updatedUser = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Entity whit id " + id + " could not be updated"));
-//        updatedUser.setFirstName(userUpdateDto.getFirstName());
-//        updatedUser.setLastName(userUpdateDto.getLastName());
-//        updatedUser.setEmail(userUpdateDto.getEmail());
-//        updatedUser.setPassword(userUpdateDto.getPassword());
-//        updatedUser.setPhoneNumber(userUpdateDto.getPhoneNumber());
-//        updatedUser.setUpdatedAt(LocalDateTime.now());
-//
-//        userRepository.save(updatedUser);
-//
-//        return UserMapper.MAPPER.mapToUserDTO(updatedUser);
-//    }
-
     @Override
     public void deleteUser(Long id) {
         if (userRepository.existsById(id)) {
@@ -100,16 +69,6 @@ public class UserService implements IUserService {
         }
     }
 
-//    @Override
-//    public User getUserByJwt(String jwt) throws ResourceNotFoundException {
-//        String email = jwtTokenProvider.getEmailFromJwtToken(jwt);
-//        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User with email " + email + " could not be found"));
-//        if (user == null) {
-//            throw new UserException("user not exist with email " + email);
-//        }
-//        return user;
-//    }
-
     @Override
     public User getUserByJwt(String jwt) throws ResourceNotFoundException {
         try {
@@ -118,7 +77,6 @@ public class UserService implements IUserService {
                     .orElseThrow(() -> new ResourceNotFoundException("User with email " + email + " could not be found"));
             return user;
         } catch (ExpiredJwtException ex) {
-            // Handle expired JWT token
             throw new UserException("JWT token has expired. Please log in again.");
         }
     }

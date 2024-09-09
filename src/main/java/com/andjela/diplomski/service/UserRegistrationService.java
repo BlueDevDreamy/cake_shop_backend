@@ -38,14 +38,11 @@ import java.util.stream.Collectors;
 @Transactional
 @Service
 public class UserRegistrationService {
-    private final UserService userService;
     private final UserRepository userRepository;
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final RegistrationTokenRepository registrationTokenRepository;
     private final AuthorityRepository authorityRepository;
     private final PasswordEncoder passwordEncoder;
-    private final CartService cartService;
-    private final RegistrationTokenService registrationTokenService;
 
 
     @Value("${frontend.resetPasswordUrl}")
@@ -62,76 +59,6 @@ public class UserRegistrationService {
         User user = registrationToken.isPresent() ? registrationToken.get().getUser() : null;
         return Optional.ofNullable(user);
     }
-
-    public ResetPasswordResponseDto resetUserPassword(String resetToken, ResetPasswordRequestDto resetPasswordDto) {
-        PasswordResetToken passwordResetToken = passwordResetTokenRepository.findByToken(resetToken)
-                .orElseThrow(() -> new ResourceNotFoundException("Nije pronadjen password reset token."));
-        User user = passwordResetToken.getUser();
-
-        if (passwordResetToken.isExpired()) {
-            passwordResetTokenRepository.delete(passwordResetToken);
-            return ResetPasswordResponseDto.builder()
-                    .tokenStatus(TokenStatus.INVALID)
-                    .message("Token je istekao.")
-                    .passwordChanged(false)
-                    .build();
-        }
-
-        user.setPassword(passwordEncoder.encode(resetPasswordDto.getPassword()));
-        user.setUpdatedAt(LocalDateTime.now());
-        userRepository.save(user);
-        passwordResetTokenRepository.delete(passwordResetToken);
-
-        log.info("Changed password for user " + user.getEmail());
-
-        return ResetPasswordResponseDto.builder()
-                .tokenStatus(TokenStatus.VALID)
-                .message("Lozinka promenjena")
-                .passwordChanged(true)
-                .build();
-    }
-//ToDo requestResetUserPassword
-
-//    public EmailSendResponseDto requestResetUserPassword(Long userId) {
-//        log.info("Reseting password for user with is " + userId);
-//        UserDto userDto = userService.getUserById(userId);
-//        User user = UserMapper.MAPPER.mapToUser(userDto);
-//
-//        Optional<PasswordResetToken> passwordResetTokenOpt = passwordResetTokenRepository.findByUser(user);
-//
-//
-//        PasswordResetToken passwordResetToken = passwordResetTokenOpt.isEmpty() ?
-//                PasswordResetToken.builder().user(user).createdAt(LocalDateTime.now()).build()
-//                : passwordResetTokenOpt.get();
-//
-//        passwordResetToken.setToken(UUID.randomUUID().toString());
-//        passwordResetToken.setExpiryDate(ZonedDateTime.now().plusMinutes(PasswordResetToken.EXPIRATION_MINUTES));
-//
-//        passwordResetTokenRepository.save(passwordResetToken);
-//
-//        final String subject = "Reset lozinke";
-//        final String resetPasswordUrl = frontendResetPasswordUrl + "?token=" + passwordResetToken.getToken();
-//        final String message = "Kliknite na link da resetujete lozinku: ";
-//        final String messageBody = message + " \r\n" + resetPasswordUrl;
-//        SendEmailRequestDto emailRequest = SendEmailRequestDto.builder()
-//                .subject(subject)
-//                .body(messageBody)
-//                .to(user.getEmail())
-//                .from(supportEmail)
-//                .build();
-//
-//        EmailSendResponseDto response = mailerService.sendTextEmail(emailRequest);
-//
-//        return response;
-//    }
-//
-//        @Transactional
-//    public UserDto registerAdmin(RegisterAdminDto request) {
-//        if(!AuthHelper.currentUserIsSuperAdmin()) {
-//            throw new ApiValidationException("Not enough privilegies to create admin.");
-//        }
-//        return registerUser(request);
-//    }
 
     @Transactional
     public UserDto registerAdmin(RegisterAdminDto request) {
@@ -173,15 +100,6 @@ public class UserRegistrationService {
 
         try {
             User registeredUser = userRepository.save(user);
-            //ToDo send email when successfully registered
-//            SendEmailRequestDto sendEmailRequestDto = SendEmailRequestDto.builder()
-//                    .subject("Registration email")
-//                    .to(user.getEmail())
-//                    .body("...")
-//                    .from("emailjstest327@gmail.com")
-//                    .build();
-//            EmailSendResponseDto emailSendResponseDto = mailerService.sendTextEmail(sendEmailRequestDto);
-//            log.info("Email response: ", emailSendResponseDto);
             return UserMapper.MAPPER.mapToUserDTO(registeredUser);
 
         } catch (RuntimeException e) {
@@ -189,54 +107,6 @@ public class UserRegistrationService {
             throw new AppException("Error creating user: " + e.getMessage());
         }
     }
-
-//    @Transactional
-//    public void confirmRegistration(final OnRegistrationCompleteEvent event) {
-//        final User user = event.getUser();
-//        RegistrationToken verificationRefreshToken = registrationTokenService.createRegistrationTokenForUser(user);
-//        final SendEmailRequestDto emailRequest = constructEmailMessageRegToken(event, user, verificationRefreshToken.getToken());
-//        EmailSendResponseDto response = mailerService.sendTextEmail(emailRequest);
-//        log.info("Email sent, response: " + response);
-//    }
-
-//    @Transactional
-//    public String resendRegistrationTokenForEmail(final String email) {
-//        final User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
-//        RegistrationToken registrationToken = registrationTokenRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException("RefreshToken", "user", email));
-//        registrationToken.updateToken(UUID.randomUUID().toString());
-//        registrationToken = registrationTokenRepository.save(registrationToken);
-//
-//        final SendEmailRequestDto emailRequest = constructEmailMessageRegToken(RequestHelper.getBaseUrl(), user, registrationToken.getToken());
-//        EmailSendResponseDto response = mailerService.sendTextEmail(emailRequest);
-//        log.info("Resend tokem email sent", response);
-//        return "Registration token resend";
-//    }
-
-//    private SendEmailRequestDto constructEmailMessageRegToken(final OnRegistrationCompleteEvent event, final User user, final String token) {
-//        return constructEmailMessageRegToken(event.getAppUrl(), user, token);
-//    }
-//    private SendEmailRequestDto constructEmailMessageRegToken(final String baseUrl, final User user, final String token) {
-//        final String subject = "Registration Confirmation";
-//        final String confirmationUrl = confirmTokenUiPageUrl + "?token=" + token;
-//        String message = "Uspesno ste se registrovali. Za zavrsetak procea registracije kliknite na link: ";
-//        String messageBody = message + " \r\n" + confirmationUrl;
-//
-//        message += "\n\n U slucaju da imate problema sa gornjim linkom kliknite na: ";
-//        final String confirmationUrlBackup = baseUrl + "/api/registration/confirm-token?token=" + token;
-//        messageBody += message + " \r\n" + confirmationUrlBackup;
-//
-//        final SendEmailRequestDto emailRequest = constructEmail(subject, messageBody, user);
-//        return emailRequest;
-//    }
-
-//    private SendEmailRequestDto constructEmail(String subject, String body, User user) {
-//        return SendEmailRequestDto.builder()
-//                .subject(subject)
-//                .body(body)
-//                .to(user.getEmail())
-//                .from(supportEmail)
-//                .build();
-//    }
 
     @Transactional
     public void saveRegistrationPassword(RegistrationPasswordDto registrationPasswordDto) {
